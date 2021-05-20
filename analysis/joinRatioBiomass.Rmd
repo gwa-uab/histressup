@@ -1,0 +1,57 @@
+---
+title: "Calculate residue factors"
+author:
+- Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
+date: "19/03/2021"
+output:
+  pdf_document:
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+  word_document: default
+  html_document:
+    df_print: paged
+bibliography: historicalResidueSupply.bib
+---
+
+```{r setup, include=FALSE, echo = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE, message=FALSE}
+#setwd("g:/Shared drives/FES_Data_Sharing (Forestry)/Manuscripts/Historical Residue Supply/Analysis")
+library(tidyverse)
+library(ggthemes)
+library(gridExtra)
+library(viridis)
+library(skimr)
+library(scales)
+library(DescTools)
+library(zoo)
+```
+
+## Taper
+
+calculates important ratios based on taper functions
+
+```{r stuff}
+ratios <- read.csv(file = '../data/ratios.csv')
+biomass <- read.csv(file = '../data/bioCalcOutput.csv') %>% select(-Province,-Height)
+ratiosBiomass <- ratios %>% right_join(biomass,by=c("Ecozone","Genus","Species","Variety","DBH"))
+ratiosBiomass <- ratiosBiomass %>% add_column(residueBiomass=0) %>% add_column(residueFactor=0)
+ratiosBiomass$residueBiomass <- ratiosBiomass$branches + ratiosBiomass$foliage +
+  (ratiosBiomass$topBarkRatio * ratiosBiomass$stem_bark) + 
+  (ratiosBiomass$topVolRatio * ratiosBiomass$stem_wood)
+ratiosBiomass$residueFactor <- ratiosBiomass$residueBiomass / ratiosBiomass$merchVol / 1000
+ratios
+biomass
+#ratiosBiomass
+#ratiosBiomass %>% filter(Species == "TRE",DBH == 20)
+ratiosBiomassBorealPlains <- ratiosBiomass %>% filter(Ecozone == 9, Species == "BAN" | Species == "CON" | Species ==  "GLA" | Species ==  "MAR" | Species == "TRE")
+ratiosBiomassBorealPlains
+
+ggplot(ratiosBiomassBorealPlains, aes(x=DBH, y=residueFactor, colour=Species)) + geom_point(shape=21)
+
+ggplot(ratiosBiomassBorealPlains, aes(x=merchVol, y=residueFactor, colour=Species)) + geom_point(shape=21)
+
+```
