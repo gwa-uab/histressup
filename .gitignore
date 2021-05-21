@@ -8,3 +8,4 @@
 *.tex
 *.aux
 *.log
+.#README.md
