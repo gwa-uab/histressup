@@ -43,12 +43,12 @@ ratiosBiomass$residueBiomass <- ratiosBiomass$branches + ratiosBiomass$foliage +
   (ratiosBiomass$topBarkRatio * ratiosBiomass$stem_bark) + 
   (ratiosBiomass$topVolRatio * ratiosBiomass$stem_wood)
 ratiosBiomass$residueFactor <- ratiosBiomass$residueBiomass / ratiosBiomass$merchVol / 1000
-ratios
-biomass
+#ratios
+#biomass
 #ratiosBiomass
 #ratiosBiomass %>% filter(Species == "TRE",DBH == 20)
 ratiosBiomassBorealPlains <- ratiosBiomass %>% filter(Ecozone == 9, Species == "BAN" | Species == "CON" | Species ==  "GLA" | Species ==  "MAR" | Species == "TRE")
-ratiosBiomassBorealPlains
+#ratiosBiomassBorealPlains
 
 ggplot(ratiosBiomassBorealPlains, aes(x=DBH, y=residueFactor, colour=Species)) + geom_point(shape=21)
 

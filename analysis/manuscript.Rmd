@@ -1,14 +1,13 @@
 ---
 title: "Historical supply of timber harvest residues in west-central Alberta"
 author:
-- Alex McPhee^[Department of Resource Economics and Environmental Sociology, University
-  of Alberta]
-- Dennis Gray^[Department of Resource Economics and Environmental Sociology, University
-  of Alberta]
+
 - Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
 - Jay Anderson^[Department of Resource Economics and Environmental Sociology, University
   of Alberta]
-date: "16/03/2021"
+- Alex McPhee^[Department of Resource Economics and Environmental Sociology, University
+  of Alberta]
+date: "13/07/2021"
 output:
   pdf_document:
     number_sections: yes
@@ -43,9 +42,7 @@ library(ezknitr)
 # Introduction
 
 Here's something that might help our writing.  It's got the headings that *Biomass and Bioenergy* wants
-and presents the main results based on our placeholder costs.  Author priority right now is alphabetical
-based on our first names, or reverse alphabetical based on our last names.  This will likely change
-based on contribution.
+and presents the main results based on our placeholder costs.  Author priority is not fixed.
 
 Note that the figures are not fixed yet.  I think the "supply curves" are particularly
 ugly, but they show our results the way they are.  The choppiness reflects the five minute
@@ -98,7 +95,6 @@ But let's not worry about the details of figure presentation yet, and focus on t
 
 ## Justification
 
-
 * renewable fuels better than fossil fuels
 * forest harvest residue just piled and burned
 * forest road networks in Alberta radiate from location
@@ -136,23 +132,39 @@ But let's not worry about the details of figure presentation yet, and focus on t
   
 ** A nice picture demonstrating dendritic nature of road network ** 
    
-  * four road classes
-  
-  * speeds by road class, loaded and unloaded
-  
-    * average speeds calculated using harmonic mean
+  * The provincial road network was sorted into four classes:
+
+    * primary provincial highways
+
+    * other paved roads
+
+    * two-lane gravel roads
+
+    * one-lane gravel or dirt roads
+
+  * Average speeds calculated using harmonic mean:
     
        $s_h= \left(\frac{s_u^{-1} + s_l^{-1}}{2}\right)^{-1}$
   
-  * road network "rasterized" **how ?**
+  * Speeds by road class, loaded and unloaded:
+
+    * primary provincial highways: loaded 80, unloaded 95, h-mean 85
+
+    * other paved roads: loaded 65, unloaded 80, h-mean 70
+
+    * two-lane gravel roads: loaded 50, unloaded 70, h-mean 60
+
+    * one-lane roads: loaded 20, unloaded 30, h-mean 25
   
 ## service areas
+
+  * Rasterized network areas were generated using the QGIS plugin, QNEAT3 (Iso-Area as Interpolation).
   
-  * median haul time calculated for each township
+  * QGIS zonal statistics were used to calculate the median network travel time in each township.
   
   
-```{r haul, echo=FALSE, fig.cap="one way haul times from edson", out.width = '100%'}
-knitr::include_graphics("../img/haultime.png")
+```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time from Edson, limited to 6 hours.", out.width = '100%'}
+knitr::include_graphics("../img/network_service.png")
 ```
   
 ## Harvestable volume by township
@@ -400,5 +412,9 @@ so far out.
 # Conclusions
 
 # Data availability
+
+# Acknowledgements
+
+Dennis Gray.  Future Energy Systems.
 
 # Literature cited
