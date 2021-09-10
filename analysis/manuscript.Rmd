@@ -414,6 +414,6 @@ so far out.
 
 # Acknowledgements
 
-Dennis Gray.  Future Energy Systems.
+Dennis Gray.  Future Energy Systems. 
 
 # Literature cited
