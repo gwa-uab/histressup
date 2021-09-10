@@ -1,5 +1,5 @@
 ---
-title: "Get utilization standards and piece size by FMU"
+title: "Get utilization standards and piece size by FMU and township"
 author:
 - Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
 date: "2021-09-10"
@@ -48,7 +48,7 @@ head(fmu_twp)
 util_piece <-full_join(util_std,piece_size,by=c("FMU","CD"))
 util_piece_fmu_twp <- full_join(util_piece,fmu_twp,by="FMU")
 util_piece_fmu_twp$piece_size <- 1/util_piece_fmu_twp$logspm3
-head(util_piece_fmu_twp)
+util_piece_fmu_twp
 
 ```
 
