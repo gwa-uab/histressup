@@ -10,3 +10,10 @@
 *.log
 .#README.md
 *~
+*.dbf
+*.shp
+*.prj
+*.shx
+*.zip
+*.html
+*.qgz
