@@ -1,13 +1,12 @@
 ---
 title: "Historical supply of timber harvest residues in west-central Alberta"
 author:
-
 - Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
 - Jay Anderson^[Department of Resource Economics and Environmental Sociology, University
   of Alberta]
 - Alex McPhee^[Department of Resource Economics and Environmental Sociology, University
   of Alberta]
-date: "13/07/2021"
+date: "2021-09-10"
 output:
   pdf_document:
     number_sections: yes
@@ -216,7 +215,7 @@ the comminution (*grinding ?*) cost was set to  \$`r comminution_cost`/odmt, and
 other costs were set to  \$`r other_cost`/odmt.  The total "constant" costs are 
  \$`r constant_cost`\$/odmt.
 
-Using @aWholeBunchOfMagic, the truck rate was set to 
+Using *blah blah blah* , the truck rate was set to 
 \$`r truck_rate`/odmt/h. 
 
 A 100 m³ trailer can haul `r odt_trailer` odmt of chipped residue.
