@@ -1,0 +1,55 @@
+---
+title: "Get utilization standards and piece size by FMU"
+author:
+- Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
+date: "2021-09-10"
+output:
+  html_document:
+    df_print: paged
+  word_document:
+  pdf_document:
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+bibliography: historicalResidueSupply.bib
+---
+
+```{r setup, include=FALSE, echo = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE, message=FALSE}
+#setwd("/home/gwa/Work/historical-residue/Analysis")
+setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/Analysis")
+
+library(tidyverse)
+# library(ggthemes)
+# library(gridExtra)
+# library(viridis)
+# library(skimr)
+# library(scales)
+# library(DescTools)
+# library(zoo)
+# library(ezknitr)
+#ezknit(file="analysis/manuscript.Rmd", out_dir="output", fig_dir="myfigs")
+```
+
+# Introduction
+
+
+
+```{r read data files, echo=FALSE}
+util_std <- read.csv(file = '../data/util_std.csv')
+piece_size <- read.csv(file = '../data/piece_size.csv')
+fmu_twp <- read.csv(file ='../data/FMU_TWP.csv')
+head(util_std)
+head(piece_size)
+head(fmu_twp)
+util_piece <-full_join(util_std,piece_size,by=c("FMU","CD"))
+util_piece_fmu_twp <- full_join(util_piece,fmu_twp,by="FMU")
+util_piece_fmu_twp$piece_size <- 1/util_piece_fmu_twp$logspm3
+head(util_piece_fmu_twp)
+
+```
+
+# Literature cited
