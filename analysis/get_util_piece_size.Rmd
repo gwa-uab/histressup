@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo=FALSE, message=FALSE}
 #setwd("/home/gwa/Work/historical-residue/Analysis")
-setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("f:/Shared Drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 library(tidyverse)
 library(janitor)
@@ -42,6 +42,7 @@ library(janitor)
 ```{r read data files, echo=FALSE}
 util_std <- read.csv(file = '../data/util_std.csv')
 piece_size <- read.csv(file = '../data/piece_size.csv')
+piece_size <- select(piece_size,-FMA)
 fmu_twp <- read.csv(file ='../data/FMU_TWP.csv')
 species_prop <- read.csv(file = '../data/species_proportions_full.csv') %>%
   select(TRM,max_species)
@@ -59,15 +60,15 @@ fmu_twp <- rbind(fmu_twp_c,fmu_twp_d)
 
 util_piece <-full_join(util_std,piece_size,by=c("FMU","CD"))
 util_piece_fmu_twp <- full_join(util_piece,fmu_twp,by=c("FMU","CD"))
-util_piece_fmu_twp$piece_size <- 1/util_piece_fmu_twp$logspm3
+util_piece_fmu_twp$piece_size <- signif(1/util_piece_fmu_twp$logspm3,3)
 util_piece_fmu_twp_species <- full_join(util_piece_fmu_twp,species_prop,by="TRM")
 util_piece_fmu_twp_species <- subset(util_piece_fmu_twp_species, (FMU != "A14") &(FMU != "A15") &(FMU != "W11")& (FMU != "W13"))
 
 subs <- subset(util_piece_fmu_twp, (!is.na(piece_size)) & (!is.na(areaha)) & (CD == "Decid"))
-avepieceD <- weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE)
+avepieceD <- signif(weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE),3)
 
 subs <- subset(util_piece_fmu_twp, (!is.na(piece_size)) & (!is.na(areaha)) & (CD == "Conif"))
-avepieceC <- weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE)
+avepieceC <- signif(weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE),3)
 
 avepieceC
 avepieceD
