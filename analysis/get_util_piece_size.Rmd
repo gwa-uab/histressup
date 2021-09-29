@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo=FALSE, message=FALSE}
 #setwd("/home/gwa/Work/historical-residue/Analysis")
-setwd("f:/Shared Drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("g:/Shared Drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 library(tidyverse)
 library(janitor)
@@ -135,7 +135,7 @@ stuff <- util_piece_fmu_twp_species %>%
 
 dbhCalcInput <- unique(stuff)
 
-save(dbhCalcInput, file="../data/dbhCalcInput.Rdata")
+save(dbhCalcInput, file="../data/dbhCalcInput.RData")
 
 
 
