@@ -130,10 +130,19 @@ util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
     )
   )
 
+stuff <- util_piece_fmu_twp_species %>%
+  select(max_species,stumpht,stumpd,topd,merch_len,piece_size)
+
+dbhCalcInput <- unique(stuff)
+
+save(dbhCalcInput, file="../data/dbhCalcInput.Rdata")
+
+
 
 tabyl(util_piece_fmu_twp_species,max_species,CD,show_na = TRUE)
 head(util_piece_fmu_twp_species)
 util_piece_fmu_twp_species
+dbhCalcInput
 ```
 
 # Literature cited
