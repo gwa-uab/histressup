@@ -1,83 +1,87 @@
-﻿FMA,FMU,CD,topd,stumpd,merch_len,stumpht
-ANC Timber (W15),W15,Conif,10,15,4.88,30
-ANC Timber (W15),W15,Decid,10,15,4.88,30
-Blue Ridge Lumber (W14),W14,Conif,11,15,3.66,15
-Blue Ridge Lumber (W14),W14,Decid,10,15,3.66,30
-Canadian Forest Products (G15),G15,Conif,12,15,3.88,30
-Canadian Forest Products (G15),G15,Decid,10,15,4.88,30
-DMI East (P21),P21,Conif,11,15,3.66,30
-DMI East (P21),P21,Decid,10,15,3.66,30
-DMI West (P19),P19,Conif,11,15,3.66,30
-DMI West (P19),P19,Decid,10,15,3.66,30
-FMU C5,C5,Conif,11,15,2.4,30
+FMA,FMU,CD,topd,stumpd,merch_len,stumpht
+ANC Timber (W15),W15,Conif,10.0,15.0,4.88,30.0
+ANC Timber (W15),W15,Decid,10.0,15.0,4.88,30.0
+Blue Ridge Lumber (W14),W14,Conif,11.0,15.0,3.66,15.0
+Blue Ridge Lumber (W14),W14,Decid,10.0,15.0,3.66,30.0
+Canadian Forest Products (G15),G15,Conif,12.0,15.0,3.88,30.0
+Canadian Forest Products (G15),G15,Decid,10.0,15.0,4.88,30.0
+DMI East (P21),P21,Conif,11.0,15.0,3.66,30.0
+DMI East (P21),P21,Decid,10.0,15.0,3.66,30.0
+DMI West (P19),P19,Conif,11.0,15.0,3.66,30.0
+DMI West (P19),P19,Decid,10.0,15.0,3.66,30.0
+FMU C5,C5,Conif,11.0,15.0,2.44,30.0
 FMU C5,C5,Decid,,,,
-FMU E8,E8,Conif,7,13,4.88,30
-FMU E8,E8,Decid,7,13,4.88,30
-FMU G13,G13,Conif,11,15,4.88,30
-FMU G13,G13,Decid,10,15,4.88,30
-FMU P14,P14,Conif,11,15,2.66,30
-FMU P14,P14,Decid,15,10,2.66,30
-"FMU PO5, P22, S26",PO5,Conif,11,15,4.88,30
-"FMU PO5, P22, S26",PO5,Decid,10,15,4.88,30
-"FMU PO5, P22, S26",P22,Conif,11,15,4.88,30
-"FMU PO5, P22, S26",P22,Decid,10,15,4.88,30
-"FMU PO5, P22, S26",S26,Conif,11,15,4.88,30
-"FMU PO5, P22, S26",S26,Decid,10,15,4.88,30
-FMU R11,R11,Conif,11,15,4.88,30
-FMU R11,R11,Decid,10,15,4.88,30
-FMU S10,S10,Conif,10,15,,30
-FMU S10,S10,Decid,10,15,,30
-Gord and Tolko (S21),S21,Conif,11,15,4.88,30
-Gord and Tolko (S21),S21,Decid,10,15,4.88,30
-Manning (P20),P20,Conif,11,30,4.88,15
-Manning (P20),P20,Decid,10,15,4.88,
-Millar Western (W11),W11,Conif,10,15,4.88,15
-Millar Western (W11),W11,Decid,10,15,4.88,15
-Millar Western (W13),W13,Conif,10,15,4.88,15
-Millar Western (W13),W13,Decid,10,15,4.88,15
-Slave Lake Pulp (S20),S20,Conif,11,15,4.88,30
-Slave Lake Pulp (S20),S20,Decid,10,15,4.88,
-Spray Lake Sawmills (B12),B12,Conif,11,30,4.88,15
-Spray Lake Sawmills (B12),B12,Decid,10,15,4.88,
-Sundre Forest Products (R10),R10,Conif,11,15,3.66,30
-Sundre Forest Products (R10),R10,Decid,10,15,3.66,30
-Tolko (High Praire) (S19),S19,Conif,11,15,4.88,30
-Tolko (High Praire) (S19),S19,Decid,10,15,4.88,30
-"Tolko, Norbord, La Crete (F26)",F26,Conif,11,15,3.66,25
-"Tolko, Norbord, La Crete (F26)",F26,Decid,10,15,4.88,30
-"Tolko, Vanderwall, West Fraser (S17)",S17,Conif,11,15,4.88,30
-"Tolko, Vanderwall, West Fraser (S17)",S17,Decid,10,15,4.88,30
-Vanderwell (S07),S24,Conif,11,15,4.88,30
-Vanderwell (S07),S24,Decid,11,15,4.88,30
-West Fraser (Edson) (R13),R13,Conif,11,15,4.88,15
-West Fraser (Edson) (R13),R13,Decid,10,15,4.88,15
-West Fraser (Hinton) (E14),E14,Conif,11,15,3.76,15
-West Fraser (Hinton) (E14),E14,Decid,10,15,3.66,30
-Weyerhaeuser (Grand Prairie) (G16),G16,Conif,10,15,3.66,15
-Weyerhaeuser (Grand Prairie) (G16),G16,Decid,10,15,3.66,15
-Weyerhaeuser (Pembina) (R15),R15,Conif,11,15,3.66,15
-Weyerhaeuser (Pembina) (R15),R15,Decid,10,15,3.66,15
-ALPAC (A14 - S23),A14,Conif,10,15,3.66,30
-ALPAC (A14 - S23),A14,Decid,10,15,3.66,30
-ALPAC (A14 - S23),A15,Conif,10,15,3.66,30
-ALPAC (A14 - S23),A15,Decid,10,15,3.66,30
-ALPAC (A14 - S23),L1,Conif,10,15,3.66,30
-ALPAC (A14 - S23),L1,Decid,10,15,3.66,30
-ALPAC (A14 - S23),L2,Conif,10,15,3.66,30
-ALPAC (A14 - S23),L2,Decid,10,15,3.66,30
-ALPAC (A14 - S23),L3,Conif,10,15,3.66,30
-ALPAC (A14 - S23),L3,Decid,10,15,3.66,30
-ALPAC (A14 - S23),L8,Conif,10,15,3.66,30
-ALPAC (A14 - S23),L8,Decid,10,15,3.66,30
-ALPAC (A14 - S23),L11,Conif,10,15,3.66,30
-ALPAC (A14 - S23),L11,Decid,10,15,3.66,30
-ALPAC (A14 - S23),S11,Conif,10,15,3.66,30
-ALPAC (A14 - S23),S11,Decid,10,15,3.66,30
-ALPAC (A14 - S23),S14,Conif,10,15,3.66,30
-ALPAC (A14 - S23),S14,Decid,10,15,3.66,30
-ALPAC (A14 - S23),S18,Conif,10,15,3.66,30
-ALPAC (A14 - S23),S18,Decid,10,15,3.66,30
-ALPAC (A14 - S23),S22,Conif,10,15,3.66,30
-ALPAC (A14 - S23),S22,Decid,10,15,3.66,30
-ALPAC (A14 - S23),S23,Conif,10,15,3.66,30
-ALPAC (A14 - S23),S23,Decid,10,15,3.66,30
+FMU E8,E8,Conif,7.0,13.0,4.88,30.0
+FMU E8,E8,Decid,7.0,13.0,4.88,30.0
+FMU G13,G13,Conif,11.0,15.0,4.88,30.0
+FMU G13,G13,Decid,10.0,15.0,4.88,30.0
+FMU P14,P14,Conif,11.0,15.0,2.66,30.0
+FMU P14,P14,Decid,15.0,10.0,2.66,30.0
+"FMU PO5, P22, S26",PO5,Conif,11.0,15.0,4.88,30.0
+"FMU PO5, P22, S26",PO5,Decid,10.0,15.0,4.88,30.0
+"FMU PO5, P22, S26",P22,Conif,11.0,15.0,4.88,30.0
+"FMU PO5, P22, S26",P22,Decid,10.0,15.0,4.88,30.0
+"FMU PO5, P22, S26",S26,Conif,11.0,15.0,4.88,30.0
+"FMU PO5, P22, S26",S26,Decid,10.0,15.0,4.88,30.0
+FMU R11,R11,Conif,11.0,15.0,4.88,30.0
+FMU R11,R11,Decid,10.0,15.0,4.88,30.0
+FMU S10,S10,Conif,10.0,15.0,,30.0
+FMU S10,S10,Decid,10.0,15.0,,30.0
+Gord and Tolko (S21),S21,Conif,11.0,15.0,4.88,30.0
+Gord and Tolko (S21),S21,Decid,10.0,15.0,4.88,30.0
+Manning (P20),P20,Conif,11.0,30.0,4.88,15.0
+Manning (P20),P20,Decid,10.0,15.0,4.88,
+Millar Western (W11),W11,Conif,10.0,15.0,4.88,15.0
+Millar Western (W11),W11,Decid,10.0,15.0,4.88,15.0
+Millar Western (W13),W13,Conif,10.0,15.0,4.88,15.0
+Millar Western (W13),W13,Decid,10.0,15.0,4.88,15.0
+Slave Lake Pulp (S20),S20,Conif,11.0,15.0,4.88,30.0
+Slave Lake Pulp (S20),S20,Decid,10.0,15.0,4.88,
+Spray Lake Sawmills (B12),B12,Conif,11.0,30.0,4.88,15.0
+Spray Lake Sawmills (B12),B12,Decid,10.0,15.0,4.88,
+Sundre Forest Products (R10),R10,Conif,11.0,15.0,3.66,30.0
+Sundre Forest Products (R10),R10,Decid,10.0,15.0,3.66,30.0
+Tolko (High Praire) (S19),S19,Conif,11.0,15.0,4.88,30.0
+Tolko (High Praire) (S19),S19,Decid,10.0,15.0,4.88,30.0
+"Tolko, Norbord, La Crete (F26)",F26,Conif,11.0,15.0,3.66,25.0
+"Tolko, Norbord, La Crete (F26)",F26,Decid,10.0,15.0,4.88,30.0
+"Tolko, Vanderwall, West Fraser (S17)",S17,Conif,11.0,15.0,4.88,30.0
+"Tolko, Vanderwall, West Fraser (S17)",S17,Decid,10.0,15.0,4.88,30.0
+Vanderwell (S07),S24,Conif,11.0,15.0,4.88,30.0
+Vanderwell (S07),S24,Decid,11.0,15.0,4.88,30.0
+West Fraser (Edson) (R13),R13,Conif,11.0,15.0,4.88,15.0
+West Fraser (Edson) (R13),R13,Decid,10.0,15.0,4.88,15.0
+West Fraser (Hinton) (E14),E14,Conif,11.0,15.0,3.76,15.0
+West Fraser (Hinton) (E14),E14,Decid,10.0,15.0,3.66,30.0
+Weyerhaeuser (Grand Prairie) (G16),G16,Conif,10.0,15.0,3.66,15.0
+Weyerhaeuser (Grand Prairie) (G16),G16,Decid,10.0,15.0,3.66,15.0
+Weyerhaeuser (Pembina) (R15),R15,Conif,11.0,15.0,3.66,15.0
+Weyerhaeuser (Pembina) (R15),R15,Decid,10.0,15.0,3.66,15.0
+ALPAC (A14 - S23),A14,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),A14,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),A15,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),A15,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L1,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L1,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L2,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L2,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L3,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L3,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L8,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L8,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L11,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),L11,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S11,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S11,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S14,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S14,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S18,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S18,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S22,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S22,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S23,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),S23,Decid,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),A16,Conif,10.0,15.0,3.66,30.0
+ALPAC (A14 - S23),A16,Decid,10.0,15.0,3.66,30.0
+Millar Western (W13),W16,Conif,10.0,15.0,4.88,15.0
+Millar Western (W13),W16,Decid,10.0,15.0,4.88,15.0

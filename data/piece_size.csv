@@ -1,4 +1,4 @@
-﻿FMA,FMU,CD,logspm3
+FMA,FMU,CD,logspm3
 ALPAC (A14),A14,Conif,4.84
 ALPAC (A14),A14,Decid,7.55
 ALPAC (A15),A15,Conif,4.42
@@ -32,7 +32,7 @@ Canadian Forest Products (G15),G15,Decid,
 DMI East (P21),P21,Conif,
 DMI East (P21),P21,Decid,
 DMI West (P19),P19,Conif,
-DMI West (P19),P18,Decid,6.1
+DMI West (P19),P19,Decid,6.1
 FMU C5,C5,Conif,
 FMU C5,C5,Decid,
 FMU E8,E8,Conif,5.8
@@ -75,3 +75,7 @@ Weyerhaeuser (Grand Prairie) (G16),G16,Conif,2.38
 Weyerhaeuser (Grand Prairie) (G16),G16,Decid,1.67
 Weyerhaeuser (Pembina) (R15),R15,Conif,2.6
 Weyerhaeuser (Pembina) (R15),R15,Decid,1.8
+ALPAC (A14),A16,Conif,4.84
+ALPAC (A14),A16,Decid,7.55
+Millar Western (W13),W16,Conif,3.3
+Millar Western (W13),W16,Decid,2.25

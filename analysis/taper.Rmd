@@ -38,8 +38,47 @@ calculates important ratios based on taper functions
 
 ```{r parameters}
 
-diameters <- c(15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30
+diameters <- c(
+13	,
+14	,
+15	,
+16	,
+17	,
+18	,
+19	,
+20	,
+21	,
+22	,
+23	,
+24	,
+25	,
+26	,
+27	,
+28	,
+29	,
+30	,
+31	,
+32	,
+33	,
+34	,
+35	,
+36	,
+37	,
+38	,
+39	,
+40	,
+41	,
+42	,
+43	,
+44	,
+45	,
+46	,
+47	,
+48	,
+49	,
+50	
 )
+
 ecozones <- c(4,5,6,9,10,14)
 speciesList <- c(",ABIE,LAS,,",",ABIE,BAL,,",",BETU,PAP,PAP,",",LARI,LAR,,",",PICE,ENG,,",",PICE,GLA,,",",PICE,MAR,,",
                  ",PINU,BAN,,",",PINU,CON,LAT,",",POPU,TRE,,",",POPU,BAL,,",",PSEU,MEN,GLA,")
@@ -48,7 +87,7 @@ species2 <- c("Fa","Fb","Bw","Lt","Se","Sw","Sb",
 header <- "Tree_num,Province,Ecozone,Genus,Species,Variety,DBH,Height"
 header2 <- "Tree_num,Province,Ecozone,Genus,Species,Variety,DBH,Height,merchVol,topVolRatio,topBarkRatio"
 
-cat(sprintf("%s\n",header),file = "../data/bioCalcInput.csv", append = FALSE)
+cat(sprintf("%s\n",header),file = "e:/ualberta/bioCalcInput.csv", append = FALSE)
 cat(sprintf("%s\n",header2),file = "../data/ratios.csv", append = FALSE)
 
 taperCoefficients <- read.csv(file = '../data/taperCoefficients.csv')
@@ -64,7 +103,8 @@ for (sp in species2) {
   b1 <- t$b1
   b2 <- t$b2
   topD <- t$uTopD
-  stumpht <- t$uStumpHt
+#  stumpht <- t$uStumpHt
+  stumpht <- 0
   minloglength <- t$uMinlen
   
   db0 <- t$db0
@@ -185,7 +225,7 @@ for (sp in species2) {
       stuff <- paste0(",AB,",ez,speciesList[[spcnt]])
       
       cat(sprintf("%i%s%6.2f%s%6.2f\n",treenum,stuff,dbh,",",ht),
-          file = "../data/bioCalcInput.csv",append = TRUE)
+          file = "e:/ualberta/bioCalcInput.csv",append = TRUE)
       cat(sprintf("%i%s%6.2f%s%6.2f%s%f%s%f%s%f\n",treenum,stuff,dbh,",",ht,",",
                   merchVol,",",topVolRatio,",",topBarkRatio),
           file = "../data/ratios.csv",append = TRUE)

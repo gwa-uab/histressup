@@ -20,9 +20,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo=FALSE, message=FALSE}
 #setwd("/home/gwa/Work/historical-residue/Analysis")
-setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/Analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 library(tidyverse)
+library(janitor)
 # library(ggthemes)
 # library(gridExtra)
 # library(viridis)
@@ -42,14 +43,96 @@ library(tidyverse)
 util_std <- read.csv(file = '../data/util_std.csv')
 piece_size <- read.csv(file = '../data/piece_size.csv')
 fmu_twp <- read.csv(file ='../data/FMU_TWP.csv')
-head(util_std)
-head(piece_size)
-head(fmu_twp)
-util_piece <-full_join(util_std,piece_size,by=c("FMU","CD"))
-util_piece_fmu_twp <- full_join(util_piece,fmu_twp,by="FMU")
-util_piece_fmu_twp$piece_size <- 1/util_piece_fmu_twp$logspm3
-util_piece_fmu_twp
+species_prop <- read.csv(file = '../data/species_proportions_full.csv') %>%
+  select(TRM,max_species)
 
+fmu_twp_c <- fmu_twp
+fmu_twp_d <- fmu_twp
+
+fmu_twp_c$CD <- "Conif"
+fmu_twp_d$CD <- "Decid"
+fmu_twp <- rbind(fmu_twp_c,fmu_twp_d)
+
+#head(util_std)
+#head(piece_size)
+#head(fmu_twp)
+
+util_piece <-full_join(util_std,piece_size,by=c("FMU","CD"))
+util_piece_fmu_twp <- full_join(util_piece,fmu_twp,by=c("FMU","CD"))
+util_piece_fmu_twp$piece_size <- 1/util_piece_fmu_twp$logspm3
+util_piece_fmu_twp_species <- full_join(util_piece_fmu_twp,species_prop,by="TRM")
+util_piece_fmu_twp_species <- subset(util_piece_fmu_twp_species, (FMU != "A14") &(FMU != "A15") &(FMU != "W11")& (FMU != "W13"))
+
+subs <- subset(util_piece_fmu_twp, (!is.na(piece_size)) & (!is.na(areaha)) & (CD == "Decid"))
+avepieceD <- weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE)
+
+subs <- subset(util_piece_fmu_twp, (!is.na(piece_size)) & (!is.na(areaha)) & (CD == "Conif"))
+avepieceC <- weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE)
+
+avepieceC
+avepieceD
+
+head(util_piece_fmu_twp_species)
+#if (util_piece_fmu_twp_species$CD == "Decid") util_piece_fmu_twp_species$max_species <- "popu_tre"
+tabyl(util_piece_fmu_twp_species,FMU,CD,show_na = TRUE)
+#if (util_piece_fmu_twp_species$CD == "Decid") util_piece_fmu_twp_species$max_species <- "popu_tre"
+#if (util_piece_fmu_twp_species$max_species == "pseu_men") util_piece_fmu_twp_species$max_species <- "pice_gla"
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(max_species = case_when(
+    CD == "Decid" ~ "popu_tre",
+    (CD == "Conif") & (max_species == "popu_tre") ~ "pice_gla",
+    (CD == "Conif") & (max_species == "popu_bal") ~ "pice_gla",
+    (CD == "Conif") & (max_species == "pseu_men") ~ "pice_gla",
+    (CD == "Conif") & (max_species == "") ~ "pice_gla",
+    CD == "Conif" ~ max_species
+    )
+  )
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(piece_size = case_when(
+    (CD == "Conif") & (is.na(piece_size)) ~ avepieceC,
+    (CD == "Decid") & (is.na(piece_size)) ~ avepieceD,
+    TRUE ~ piece_size
+    )
+  )
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(stumpht = case_when(
+    (CD == "Conif") & (is.na(stumpht)) ~ 30.0,
+    (CD == "Decid") & (is.na(stumpht)) ~ 30.0,
+    TRUE ~ stumpht
+    )
+  )
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(merch_len = case_when(
+    (CD == "Conif") & (is.na(merch_len)) ~ 4.88,
+    (CD == "Decid") & (is.na(merch_len)) ~ 4.88,
+    TRUE ~ merch_len
+    )
+  )
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(stumpd = case_when(
+    (CD == "Conif") & (is.na(stumpd)) ~ 15.0,
+    (CD == "Decid") & (is.na(stumpd)) ~ 15.0,
+    TRUE ~ stumpd
+    )
+  )
+
+util_piece_fmu_twp_species <- util_piece_fmu_twp_species %>%
+  mutate(topd = case_when(
+    (CD == "Conif") & (is.na(topd)) ~ 11.0,
+    (CD == "Decid") & (is.na(topd)) ~ 10.0,
+    TRUE ~ topd
+    )
+  )
+
+
+tabyl(util_piece_fmu_twp_species,max_species,CD,show_na = TRUE)
+head(util_piece_fmu_twp_species)
+util_piece_fmu_twp_species
 ```
 
 # Literature cited
