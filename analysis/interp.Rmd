@@ -1,0 +1,43 @@
+---
+title: "interp_games"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libraries, echo=FALSE, message=FALSE}
+#setwd("/home/gwa/Work/historical-residue/Analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+
+library(tidyverse)
+library(janitor)
+
+biomass <- read.csv(file = '../data/bioCalcOutput.csv')
+
+t <- biomass %>% select(-Tree_num,-Province) %>%
+  filter(Ecozone == 4) %>%
+  filter(Genus == "PICE") %>%
+  filter(Species == "GLA")
+
+x <- t$DBH
+y_sw <- t$stem_wood
+y_sb <- t$stem_bark
+y_b <- t$branches
+y_f <- t$foliage
+
+dbh <- 25.3
+
+approx(x,y_sw,xout=dbh,rule=2)
+approx(x,y_sb,xout=dbh,rule=2)
+approx(x,y_b,xout=dbh,rule=2)
+approx(x,y_f,xout=dbh,rule=2)
+
+species_prop <- read.csv(file = '../data/species_proportions_full.csv') %>%
+  select(TRM,max_species)
+tabyl(species_prop$max_species)
+```
