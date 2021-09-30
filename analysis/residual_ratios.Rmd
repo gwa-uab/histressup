@@ -1,0 +1,40 @@
+---
+title: "Inverse Taper Models"
+author:
+
+- Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
+
+date: "2021-09-16"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document:
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+bibliography: historicalResidueSupply.bib
+---
+
+```{r setup, include=FALSE, echo = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE, message=FALSE}
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+library(tidyverse)
+```
+
+## Taper
+
+calculates important ratios based on taper functions
+
+```{r parameters}
+
+
+
+residual_ratios <-
+  read.csv(file = '../data/residual_ratios.csv', fileEncoding = 'UTF-8-BOM')
+residual_ratios
+
+```

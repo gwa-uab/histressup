@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries, echo=FALSE, message=FALSE}
-setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
@@ -70,9 +70,10 @@ t <- left_join(dbhCalcInput, taperCoefficients, by = "species")
 t <- t %>%
   select(-max_species,-uStumpHt, -uStumpD, -uTopD, -uMinlen, -sppgrp)
 
-outfile <- file("../data/output.txt")
+out <- file("../data/output.csv")
 
-
+sink(out)
+print(sprintf(",species,piece_size,stump_ht,stump_d,top_d,min_len,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop, "))
 
 for (irow in 1:nrow(t))
 {
@@ -86,6 +87,7 @@ for (irow in 1:nrow(t))
   topD <- t[irow, ]$topd
   minloglength <- t[irow, ]$merch_len
   piece_size <- t[irow, ]$piece_size
+  species <- t[irow,]$species
   
   mindbh <- 15
   maxdbh <- 30
@@ -224,10 +226,18 @@ for (irow in 1:nrow(t))
     
   }
   
+  top_ib_prop <- topVol/totalIBVolume$value
+  top_bark_prop <- topBarkVolume/totalBarkVolume
+  
+  
   calculated_dbh <- guess
-  writeLines(c(t[irow,]$species,count,calculated_dbh,ht),outfile)
+  print(sprintf(",%2s,%3i,%3i,%3i,%5.2f,%6.3f,%5.1f,%5.1f,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,",
+                species,stumpht*100,stumpd,topD,minloglength,piece_size,calculated_dbh,ht,
+                totalOBVolume$value,totalIBVolume$value,totalBarkVolume,obVol,ibVol,
+                topVol,topObVol$value,topBarkVolume,top_ib_prop,top_bark_prop))
+  irow
 }
 
-close(outfile)
+sink()
 
 ```
