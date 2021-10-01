@@ -206,7 +206,7 @@ for (irow in 1:nrow(t))
   
   
   calculated_dbh <- guess
-  print(sprintf(",%2s,%3i,%3i,%3i,%5.2f,%6.3f,%5.1f,%5.1f,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,",
+  print(sprintf(",%2s,%3i,%3i,%3i,%5.2f,%6.3f,%5.1f,%5.1f,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,\n",
                 species,stumpht*100,stumpd,topD,minloglength,piece_size,calculated_dbh,ht,
                 totalOBVolume$value,totalIBVolume$value,totalBarkVolume,obVol,ibVol,
                 topVol,topObVol$value,topBarkVolume,top_ib_prop,top_bark_prop))
