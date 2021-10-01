@@ -201,6 +201,7 @@ for (irow in 1:nrow(t))
     
   }
   
+  
   top_ib_prop <- topVol/totalIBVolume$value
   top_bark_prop <- topBarkVolume/totalBarkVolume
   
