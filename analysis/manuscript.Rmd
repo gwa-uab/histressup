@@ -229,7 +229,7 @@ twp_merch_vol$residue_odmt <- twp_merch_vol$adj_vol * odmt_adj_factor
 t <- read.csv(file = '../data/harvest_township_stats_melt_area.csv')
 t <- subset(t, select = c(TRM,year,harvest_ha)) %>% filter(year >=1990)
 t <- merge(t, twp_merch_vol, by = "TRM", all=TRUE)
-t$adj_vol <- t$adj_vol %>% replace_na(263.1)  # there is an NAs problem here.  replace NAs with average.
+t$adj_vol <- t$adj_vol %>% replace_na(0)  # there is an NAs problem here.  replace NAs with average.
                                               # is that the right way to do it?
 t$harvest_vol <- t$harvest_ha * t$adj_vol 
 t$residue_odmt <- t$harvest_vol * odmt_adj_factor
