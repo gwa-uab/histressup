@@ -1,20 +1,23 @@
 ---
-title: "Historical supply of timber harvest residues in west-central Alberta"
+title: "Historical Supply of Residual Biomass from Timber Harvest in West-central Alberta, Canada"
 author:
-- Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
-- Jay Anderson^[Department of Resource Economics and Environmental Sociology, University
+- Glen W. Armstrong^[Department of Renewable Resources, University of Alberta]
+- Jay A. Anderson^[Department of Resource Economics and Environmental Sociology, University
   of Alberta]
-- Alex McPhee^[Department of Resource Economics and Environmental Sociology, University
+- Alex W. McPhee^[Department of Resource Economics and Environmental Sociology, University
   of Alberta]
-date: "2021-09-10"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+#date: "2021-10-05"
 output:
+  html_document:
+    df_print: paged
+  word_document:
   pdf_document:
     number_sections: yes
     latex_engine: xelatex
     keep_tex: yes
-  word_document:
-  html_document:
-    df_print: paged
+csl: canadian-journal-of-forest-research
+#csl: biomass-and-bioenergy
 bibliography: historicalResidueSupply.bib
 ---
 
@@ -24,8 +27,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo=FALSE, message=FALSE}
 #setwd("/home/gwa/Work/historical-residue/Analysis")
-#setwd("g:/Shared drives/FES_Data_Sharing (Forestry)/Manuscripts/Historical Residue Supply/Analysis")
-
+#setwd("g:/Shared drives/FES_Data_Sharing (Forestry)/Manuscripts/Historical ResidueSupply/Analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
@@ -91,6 +94,8 @@ But let's not worry about the details of figure presentation yet, and focus on t
 @Ackom2010
 
 @Acuna2019
+
+@Boudewyn2007
 
 ## Justification
 
@@ -220,7 +225,7 @@ Using *blah blah blah* , the truck rate was set to
 
 A 100 m³ trailer can haul `r odt_trailer` odmt of chipped residue.
 
-```{r read data files, echo=FALSE}
+```{r read_data_files, echo=FALSE}
 t <- read.csv(file = '../data/township_merchantable_volume.csv')
 twp_merch_vol <- t %>% select(c(TRM,mean_merch_volume)) 
 twp_merch_vol$adj_vol <- twp_merch_vol$mean_merch_volume * merch_vol_adj_factor
@@ -311,7 +316,7 @@ knitr::include_graphics("../img/alberta_harvest.png")
 Some lovely supply curves
 
 
-```{r supply curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (cycle time) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
+```{r supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (cycle time) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
 
 
 
@@ -337,7 +342,7 @@ p
 ```
 
 
-```{r more supply curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
+```{r more_supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
 ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
   labs(x = "cumulative residue (1000 odmt)") +
   labs(y = "marginal cost ($/odmt)") +
@@ -414,6 +419,6 @@ so far out.
 
 # Acknowledgements
 
-Dennis Gray.  Future Energy Systems. 
+Dennis Gray contributed to data collection.  Funding was provided by Future Energy Systems, University of Alberta. 
 
 # Literature cited
