@@ -19,8 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries, echo=FALSE, message=FALSE}
-#setwd("/home/gwa/Work/historical-residue/Analysis")
-setwd("g:/Shared Drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+#setwd("g:/Shared Drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 library(tidyverse)
 library(janitor)
@@ -46,6 +46,7 @@ piece_size <- select(piece_size,-FMA)
 fmu_twp <- read.csv(file ='../data/FMU_TWP.csv')
 species_prop <- read.csv(file = '../data/species_proportions_full.csv') %>%
   select(TRM,max_species)
+spp_lookup <- read.csv(file ='../data/species_lookup.csv')
 
 fmu_twp_c <- fmu_twp
 fmu_twp_d <- fmu_twp
@@ -70,12 +71,12 @@ avepieceD <- signif(weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE),3)
 subs <- subset(util_piece_fmu_twp, (!is.na(piece_size)) & (!is.na(areaha)) & (CD == "Conif"))
 avepieceC <- signif(weighted.mean(subs$piece_size,subs$areaha,na.rm = TRUE),3)
 
-avepieceC
-avepieceD
+#avepieceC
+#avepieceD
 
 head(util_piece_fmu_twp_species)
 #if (util_piece_fmu_twp_species$CD == "Decid") util_piece_fmu_twp_species$max_species <- "popu_tre"
-tabyl(util_piece_fmu_twp_species,FMU,CD,show_na = TRUE)
+#tabyl(util_piece_fmu_twp_species,FMU,CD,show_na = TRUE)
 #if (util_piece_fmu_twp_species$CD == "Decid") util_piece_fmu_twp_species$max_species <- "popu_tre"
 #if (util_piece_fmu_twp_species$max_species == "pseu_men") util_piece_fmu_twp_species$max_species <- "pice_gla"
 
@@ -139,10 +140,24 @@ save(dbhCalcInput, file="../data/dbhCalcInput.RData")
 
 
 
-tabyl(util_piece_fmu_twp_species,max_species,CD,show_na = TRUE)
-head(util_piece_fmu_twp_species)
+#tabyl(util_piece_fmu_twp_species,max_species,CD,show_na = TRUE)
+#head(util_piece_fmu_twp_species)
+
+rename(util_piece_fmu_twp_species,stump_d = stumpd)
+rename(util_piece_fmu_twp_species,top_d = topd)
+rename(util_piece_fmu_twp_species,stump_ht = stumpht)
+rename(util_piece_fmu_twp_species,min_len = merch_len)
+rename(util_piece_fmu_twp_species,merch_ib_vol = piece_size)
+
+
+util_piece_fmu_twp_species <- left_join(util_piece_fmu_twp_species,spp_lookup)
+
+rename(util_piece_fmu_twp_species,species = sp)
+
+save(util_piece_fmu_twp_species,file="../data/util_piece_fmu_twp_species.RData")
+
 util_piece_fmu_twp_species
-dbhCalcInput
+spp_lookup
 ```
 
 # Literature cited

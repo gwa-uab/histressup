@@ -1,10 +1,11 @@
 ---
-title: "Inverse Taper Models"
+title: "Residual Ratios"
 author:
 
 - Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
 
-date: "2021-09-16"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+#date: "2021-09-16"
 output:
   html_document:
     df_print: paged
@@ -25,7 +26,7 @@ setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscri
 library(tidyverse)
 ```
 
-## Taper
+## Residual ratios
 
 calculates important ratios based on taper functions
 
@@ -35,6 +36,8 @@ calculates important ratios based on taper functions
 
 residual_ratios <-
   read.csv(file = '../data/residual_ratios.csv', fileEncoding = 'UTF-8-BOM')
+residual_ratios$prop_of_137 <- residual_ratios$merch_ib_vol / residual_ratios$merch_ib_vol137
 residual_ratios
+save(residual_ratios,file="../data/residualRatios.RData")
 
 ```

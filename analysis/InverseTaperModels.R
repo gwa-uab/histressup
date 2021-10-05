@@ -1,6 +1,6 @@
 
-#setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
-setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+#setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 
 library(tidyverse)
@@ -45,10 +45,9 @@ t <- left_join(dbhCalcInput, taperCoefficients, by = "species")
 t <- t %>%
   select(-max_species,-uStumpHt, -uStumpD, -uTopD, -uMinlen, -sppgrp)
 
-out <- file("../data/output.csv")
+f <- file("../data/residual_ratios.csv","w")
 
-sink(out)
-print(sprintf(",species,piece_size,stump_ht,stump_d,top_d,min_len,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop, "))
+writeLines(sprintf("species,piece_size,stump_ht,stump_d,top_d,min_len,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop,merch_ib_vol137 "),f,sep="\n")
 
 for (irow in 1:nrow(t))
 {
@@ -166,7 +165,44 @@ for (irow in 1:nrow(t))
       ibVolume$value
     }
     
+    
     merchVol <- ibVol
+    ibVol <- if (loglength < minloglength) {
+      0
+    } else {
+      ibVolume$value
+    }
+    
+    merchht137 <-
+      uniroot(
+        taperTop,
+        dbh = dbh,
+        topD = 7,
+        b0 = b0,
+        b1 = b1,
+        b2 = b2,
+        lower = 0,
+        upper = ht
+      )$root
+    loglength <- merchht - stumpht
+    
+    ibVol <- if (loglength < minloglength) {
+      0
+    } else {
+      ibVolume$value
+    }
+    
+    ibVolume137 <-
+      integrate(Vectorize(ibArea), lower = 0.3, upper = merchht137)
+    
+    
+    
+    ibVol137 <- if (loglength < 4.88) {
+      0
+    } else {
+      ibVolume137$value
+    }
+    
     stemBarkVolume <- obVol - ibVol
     topVolume <-
       integrate(Vectorize(ibArea), merchht, upper = ht)
@@ -207,11 +243,11 @@ for (irow in 1:nrow(t))
   
   
   calculated_dbh <- guess
-  print(sprintf(",%2s,%3i,%3i,%3i,%5.2f,%6.3f,%5.1f,%5.1f,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,\n",
+  writeLines(sprintf("%2s,%3i,%3i,%3i,%5.2f,%6.3f,%5.1f,%5.1f,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g,%1.3g",
                 species,stumpht*100,stumpd,topD,minloglength,piece_size,calculated_dbh,ht,
                 totalOBVolume$value,totalIBVolume$value,totalBarkVolume,obVol,ibVol,
-                topVol,topObVol$value,topBarkVolume,top_ib_prop,top_bark_prop))
+                topVol,topObVol$value,topBarkVolume,top_ib_prop,top_bark_prop,ibVol137),f,sep="\n")
   irow
 }
 
-sink()
+close(f)
