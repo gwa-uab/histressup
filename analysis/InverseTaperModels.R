@@ -1,16 +1,10 @@
 
-setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
-#setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+#setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 
 
 library(tidyverse)
-# library(ggthemes)
-# library(gridExtra)
-# library(viridis)
-# library(skimr)
-# library(scales)
-# library(DescTools)
-# library(zoo)
+
 
 
 
@@ -47,7 +41,7 @@ t <- t %>%
 
 f <- file("../data/residual_ratios.csv","w")
 
-writeLines(sprintf("species,piece_size,stump_ht,stump_d,top_d,min_len,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop,merch_ib_vol137 "),f,sep="\n")
+writeLines(sprintf("species,stump_ht,stump_d,top_d,min_len,piece_size,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop,merch_ib_vol137 "),f,sep="\n")
 
 for (irow in 1:nrow(t))
 {

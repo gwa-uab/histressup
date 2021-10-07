@@ -1,4 +1,4 @@
-species,piece_size,stump_ht,stump_d,top_d,min_len,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop,merch_ib_vol137 
+species,stump_ht,stump_d,top_d,min_len,piece_size,dbh,ht,total_ob_vol,total_ib_vol,total_bark_vol,merch_ob_vol,merch_ib_vol,top_ib_vol,top_ob_vol,top_bark_vol,top_ib_prop,top_bark_prop,merch_ib_vol137 
 Sb, 30, 15, 10, 4.88, 0.290, 22.6, 25.2,0.383,0.341,0.0428,0.325,0.29,0.0283,0.0337,0.00539,0.083,0.126,0.311
 Sw, 30, 15, 10, 4.88, 0.290, 22.6, 20.5,0.365,0.325,0.0398,0.325,0.29,0.0179,0.0213,0.00339,0.0551,0.0852,0.304
 Pl, 30, 15, 10, 4.88, 0.290, 20.4, 24.9,0.361,0.33,0.0311,0.316,0.29,0.0266,0.0302,0.00358,0.0808,0.115,0.31
