@@ -109,30 +109,54 @@ But let's not worry about the details of figure presentation yet, and focus on t
 
 # Materials and methods
 
-## 30 m harvest raster
+## Harvested area
+
+Canada's National Forest Inventory System (NFIS) is a product of the Canadian
+Council of Forest Ministers (CCFM).  One of the data sets provided by the NFIS
+identifies locations of forest harvesting across Canada for the years 1985-2015
+detected from Landsat satellite imagery.  These data are at a 30 m spatial 
+resolution.  The data were downloaded from
+https://opendata.nfis.org/downloads/forest_change/CA_forest_harvest_mask_year_1985_2015.zip
+(accessed 2020-03-05).
+The data set is described in @Hermosilla2016.
   
-  * for 1985 - 2015
-  * Canada wide and 30 m resolution
-  * description
-  * clipped to Alberta boundary from GENESIS
+The data were clipped to the Alberta provincial boundary which was obtained from
+Altalis (https://www.altalis.com, accessed 2021-09-10), which manages much of the spatial information
+belonging to the Alberta government.
   
 ## Alberta township coverage
   
-  * from GENESIS
+For our analysis, most of our information was aggregated to the township level.
+In Alberta, the legal description of any parcel of land uses the Alberta Township
+Survey System (see https://www.alberta.ca/alberta-township-survey-system.aspx, 
+accessed 2021-10-08). Most townships are roughly square in shape, with an average 
+area of about 9,533 ha.  The GIS coverage for township outlines was obtained 
+from Altalis (https://www.altalis.com, accessed 2021-09-10).
+
+The harvest areas obtained from the NFIS forest harvesting data set were
+aggregated to the township level so that the harvest area for each township
+in each of the years from 1985-2015 was recorded in a data set.
+
   
-## 3 mill locations
+## Hypothetical plant locations and capacities
 
-* Edson (OSB plant)
-* Hinton (pulp mill)
-* Whitecourt (Millar Western pulp mill)
+For this study, we assumed that forest harvest residue processing would take place
+at a plant co-located with an existing forest products manufacturing facility.
+We used the Weyerhaeuser oriented strand board plant in Edson, the Millar Western
+Forest Products Ltd. pulp mill in Whitecourt, and the West Fraser pulp mill 
+in Hinton as the locations
+for the hypothetical forest residue processing facilities.
 
-## 3 alternative capacities
+As well as considering locations for the hypothetical plants, we considered
+3 different pland capacities: 200,000 odmt/yr corresponding to a small 
+wood pellet mill, 400,000 odmt/yr corresponding to a large pellet mill or
+a small ethanol plant, and 800,000 odmt/yr corresponding to a large ethanol 
+plant.
 
-* 200,000 odmt/yr (small pellet mill)
-* 400,000 odmt/yr (large pellet mill, small ethanol plant)
-* 800,000 odmt/yr (large ethanol plant)
   
-## Harvest area by township by year
+
+
+
 
 ## Alberta road network
   
