@@ -11,7 +11,7 @@ CDProp <-
 CDProp <- CDProp %>%
   mutate(dProp = popu_tre) %>%
   mutate(cProp = abie_bal + abie_las + pice_eng + pice_gla + pice_mar + 
-           pinu_ban + pinu_con + pseu_men) %>%
+           pinu_ban + pinu_con + pseu_men + pinu_spp) %>%
   mutate(tProp = dProp + cProp) %>%
   mutate(cProp = cProp / tProp) %>%
   mutate(dProp = dProp / tProp) %>%

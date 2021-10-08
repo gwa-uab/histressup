@@ -25,10 +25,11 @@ dbhCalcInput <- dbhCalcInput %>%
       `pice_eng` = "Se",
       `pinu_con` = "Pl",
       `pinu_ban` = "Pj",
-      `pinu_spp` = "Pl",
+      `pinu_spp` = "Px",
       `popu_tre` = "Aw",
       `abie_bal` = "Fb",
       `abie_las` = "Fa",
+      `pseu_men` = "Fd",
       `lari_lar` = "Lt"
     )
   )

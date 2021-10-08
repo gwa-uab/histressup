@@ -9,13 +9,13 @@ author:
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 #date: "2021-10-05"
 output:
-  html_document:
-    df_print: paged
-  word_document:
   pdf_document:
     number_sections: yes
     latex_engine: xelatex
     keep_tex: yes
+  word_document:
+  html_document:
+    df_print: paged
 csl: canadian-journal-of-forest-research
 #csl: biomass-and-bioenergy
 bibliography: historicalResidueSupply.bib
@@ -27,8 +27,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo=FALSE, message=FALSE}
 #setwd("/home/gwa/Work/historical-residue/Analysis")
-#setwd("g:/Shared drives/FES_Data_Sharing (Forestry)/Manuscripts/Historical ResidueSupply/Analysis")
-setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
+setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp")
+#setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
@@ -231,7 +231,13 @@ A 100 m³ trailer can haul `r odt_trailer` odmt of chipped residue.
 t <- read.csv(file = '../data/township_merchantable_volume.csv')
 twp_merch_vol <- t %>% select(c(TRM,mean_merch_volume)) 
 twp_merch_vol$adj_vol <- twp_merch_vol$mean_merch_volume * merch_vol_adj_factor
-twp_merch_vol$residue_odmt <- twp_merch_vol$adj_vol * odmt_adj_factor
+#twp_merch_vol$residue_odmt <- twp_merch_vol$adj_vol * odmt_adj_factor
+load("../data/biomass_by_trm.RData")
+twp_merch_vol <- merge(twp_merch_vol,biomass_by_trm,by = "TRM", all = TRUE)
+twp_merch_vol <- twp_merch_vol %>% 
+  mutate(adj_factor = res_total/adj_vol)
+
+mean(twp_merch_vol$adj_factor)
 
 t <- read.csv(file = '../data/harvest_township_stats_melt_area.csv')
 t <- subset(t, select = c(TRM,year,harvest_ha)) %>% filter(year >=1990)
@@ -239,7 +245,9 @@ t <- merge(t, twp_merch_vol, by = "TRM", all=TRUE)
 t$adj_vol <- t$adj_vol %>% replace_na(0)  # there is an NAs problem here.  replace NAs with average.
                                               # is that the right way to do it?
 t$harvest_vol <- t$harvest_ha * t$adj_vol 
-t$residue_odmt <- t$harvest_vol * odmt_adj_factor
+t$residue_odmt <- t$harvest_ha * t$res_total
+t <- t %>% 
+  filter(!is.na(residue_odmt))
 
 
 harv <- subset(t, harvest_ha > 0)
@@ -421,8 +429,8 @@ so far out.
 
 # Acknowledgements
 
-Dennis Gray contributed to data collection.
-
 This research was supported by funding from the Canada First Research Excellence Fund as part of the University of Alberta’s Future Energy Systems research initiative.
+
+Dennis Gray contributed to data compilation.
 
 # Literature cited

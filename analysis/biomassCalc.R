@@ -8,15 +8,22 @@ load("../data/conifProps.RData")
 load("../data/decidProps.RData")
 fte <- read.csv(file = '../data/FMU_TWP_ECOZONE.csv')
 fte <- fte %>% 
+  filter(FTEAREA > 0.001) %>%  
   rename(FMU = FMU_NAME) %>% 
-  rename(Ecozone = ECOZONE)
+  rename(Ecozone = ECOZONE) %>%
+  filter(!is.na(Ecozone)) %>%
+  filter(!is.na(TRM)) %>%
+  mutate(FTEAREA = ifelse(FTEAREA > areaha,areaha,FTEAREA)) %>% 
+  mutate(fteprop = FTEAREA/areaha)
+
+save(fte, file = "../data/fte.RData")
 
 sppLookup <- read.csv(file = '../data/species_lookup.csv')
 
 c <- conifProps %>% 
   select(-cVol,-cStems,-cTopWoodProp,-cTopBarkProp)
 
-#barplot(table(conifProps$sp))
+barplot(table(conifProps$sp))
 
 d <- decidProps %>% 
   select(-dVol,-dStems,-dTopWoodProp,-dTopBarkProp)

@@ -20,9 +20,12 @@ load("../data/conifProps.RData")
 load("../data/decidProps.RData")
 
 fte <- fmu_twp_ecozone %>% 
+  filter(FTEAREA > 0.001) %>% 
   select(TRM,FMU_NAME,ECOZONE) %>% 
   rename(FMU = FMU_NAME) %>% 
   rename(Ecozone = ECOZONE)
+
+fte <- unique(fte)
 
 conifProps <- left_join(conifProps,fte)
 decidProps <- left_join(decidProps,fte)
@@ -41,6 +44,7 @@ t <- biomass %>%
 t <- left_join(t,sppLookup)
 
 tC <- left_join(conifProps,t)
+tC <- unique(tC)
 tC <- tC %>%
   filter(!is.na(TRM)) %>%
   mutate(residue = cStems / 1000 * (foliage + branches + cTopBarkProp * stem_bark +
@@ -48,9 +52,15 @@ tC <- tC %>%
   mutate(CD = "con")  %>% 
   rename(stems = cStems) %>% 
   rename(vol = cVol) %>%
-  select(TRM,FMU,Ecozone,sp,vol,stems,residue)
+  select(TRM,FMU,Ecozone,CD,sp,vol,stems,residue)
+
+tC$vol[is.na(tC$vol)] <- 0
+tC$stems[is.na(tC$stems)] <- 0
+tC$residue[is.na(tC$residue)] <- 0
+tC$Ecozone[is.na(tC$Ecozone)] <- 0
 
 tD <- left_join(decidProps,t)
+tD < unique(tD)
 tD <- tD %>% 
   filter(!is.na(TRM)) %>% 
   mutate(residue = dStems / 1000 * (foliage + branches + dTopBarkProp * stem_bark +
@@ -58,9 +68,62 @@ tD <- tD %>%
   mutate(CD = "dec") %>% 
   rename(stems = dStems) %>% 
   rename(vol = dVol)%>%
-  select(TRM,FMU,Ecozone,sp,vol,stems,residue)
+  select(TRM,FMU,Ecozone,CD,sp,vol,stems,residue)
+
+tD$vol[is.na(tD$vol)] <- 0
+tD$stems[is.na(tD$stems)] <- 0
+tD$residue[is.na(tD$residue)] <- 0
+tD$Ecozone[is.na(tD$Ecozone)] <- 0
 
 all <- rbind(tC,tD)
+all$residue <- all$residue * 0.624 # 0.624 is from Peltola (2011)
 
-write.csv(tC,"../data/tC.csv",row.names = FALSE, quote = FALSE)
+residue_by_TFE <- all %>% 
+  filter(Ecozone > 0) %>% 
+  select(TRM,FMU,Ecozone,CD,residue) %>% 
+  pivot_wider(names_from = CD, values_from = residue)
+
+residue_by_TFE <- residue_by_TFE %>% 
+  mutate(res_total = con + dec) %>%  
+  rename(res_con = con) %>% 
+  rename(res_dec = dec) %>% 
+  filter(res_total > 0.001)
+
+save(residue_by_TFE, file = "../data/residue_by_TFE.RData")
+
+write.csv(residue_by_TFE,file = "../data/residue_by_TFE.csv")
+
+load("../data/fte.RData")
+
+fte <- fte %>% 
+  select(TRM,FMU,Ecozone,fteprop)
+
+fte_residue <- left_join(residue_by_TFE,fte)
+
+fte_residue <- fte_residue %>% 
+  mutate(con_new = res_con * fteprop) %>%
+  mutate(dec_new = res_dec * fteprop) %>%
+  mutate(total_new = res_total * fteprop) %>%
+  select(TRM,con_new,dec_new,total_new) %>%
+  rename(res_con = con_new) %>% 
+  rename(res_dec = dec_new) %>% 
+  rename(res_total = total_new) 
+  
+attach(fte_residue)
+
+biomass_by_trm <- aggregate(fte_residue,by=list(TRM), FUN=sum)
+
+biomass_by_trm <- biomass_by_trm %>% 
+  select(-TRM) %>% 
+  rename(TRM = Group.1)
+
+save(biomass_by_trm,file = "../data/biomass_by_trm.RData")
+
+
+
+  
+  
+  
+
+
 
