@@ -1,32 +1,59 @@
 ---
-title: "Historical Supply of Residual Biomass from Timber Harvest in West-central Alberta, Canada"
+title: Historical Supply of Biomass from Timber Harvest Residue in West-central Alberta, Canada
 author:
-- Glen W. Armstrong^[Department of Renewable Resources, University of Alberta]
-- Jay A. Anderson^[Department of Resource Economics and Environmental Sociology, University
-  of Alberta]
-- Alex W. McPhee^[Department of Resource Economics and Environmental Sociology, University
-  of Alberta]
+  - Glen W. Armstrong:
+      institute:
+        - rr
+      correspondence: "yes"
+      email: gwa@ualberta.ca
+  - Jay A. Anderson:
+      email: jaya@ualberta.ca
+      institute:
+        - rees
+  - Alex W. McPhee:
+      email: awmcphee@ualberta.ca
+      institute: 
+        - rees
+institute:
+  - rr : Department of Renewable Resources, University of Alberta
+  - rees: Department of Resource Economics and Environmental Sociology, University of Alberta
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 #date: "2021-10-05"
+header-includes:
+  - \usepackage[left]{lineno}
+  - \linenumbers
 output:
+  html_document:
+    df_print: paged
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
   pdf_document:
     number_sections: yes
     latex_engine: xelatex
     keep_tex: yes
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
   word_document:
-  html_document:
-    df_print: paged
-csl: canadian-journal-of-forest-research
-#csl: biomass-and-bioenergy
+     pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+#csl: canadian-journal-of-forest-research
+csl: biomass-and-bioenergy
 bibliography: historicalResidueSupply.bib
 ---
+
+<!-- \fontfamily{cmr} -->
+<!-- \fontsize{12}{22} -->
+<!-- \fontseries{b} -->
+<!-- \selectfont -->
 
 ```{r setup, include=FALSE, echo = FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries, echo=FALSE, message=FALSE}
-#setwd("/home/gwa/Work/historical-residue/Analysis")
 setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp")
 #setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
@@ -43,61 +70,59 @@ library(ezknitr)
 
 # Introduction
 
-Here's something that might help our writing.  It's got the headings that *Biomass and Bioenergy* wants
-and presents the main results based on our placeholder costs.  Author priority is not fixed.
+Here's something that might help our writing.  It's got the headings that
+*Biomass and Bioenergy* wants and presents the main results based on our
+placeholder costs.  Author priority is not fixed.
 
-Note that the figures are not fixed yet.  I think the "supply curves" are particularly
-ugly, but they show our results the way they are.  The choppiness reflects the five minute
-service areas, and is valuable because of that.  I am thinking that putting an
-average of the 31 years in a different colour in the middle of the cloud might be helpful.
+This is **really fucking bold**.
 
-But let's not worry about the details of figure presentation yet, and focus on the writing.
 
-## Some obvious citations
 
-@R2021
+<!-- ## Some obvious citations -->
 
-@Wickham2019
+<!-- @R2021 -->
 
-@qgis2021
+<!-- @Wickham2019 -->
 
-@Onyango2019
+<!-- @qgis2021 -->
 
-@Carriquiry2011
+<!-- @Onyango2019 -->
 
-@Miles2009
+<!-- @Carriquiry2011 -->
 
-@Dessbesell2017
+<!-- @Miles2009 -->
 
-@Dymond2010
+<!-- @Dessbesell2017 -->
 
-@Lambert2005
+<!-- @Dymond2010 -->
 
-@Lo2021
+<!-- @Lambert2005 -->
 
-@Malladi2018
+<!-- @Lo2021 -->
 
-@Mansuy2017
+<!-- @Malladi2018 -->
 
-@Mansuy2020
+<!-- @Mansuy2017 -->
 
-@Schroder2019
+<!-- @Mansuy2020 -->
 
-@Shabani2013
+<!-- @Schroder2019 -->
 
-@Shooshtarian2018
+<!-- @Shabani2013 -->
 
-@Yemshanov2018
+<!-- @Shooshtarian2018 -->
 
-@Zheng2021
+<!-- @Yemshanov2018 -->
 
-@Ackom2010
+<!-- @Zheng2021 -->
 
-@Acuna2019
+<!-- @Ackom2010 -->
 
-@Boudewyn2007
+<!-- @Acuna2019 -->
 
-@Peltola2011
+<!-- @Boudewyn2007 -->
+
+<!-- @Peltola2011 -->
 
 ## Justification
 
@@ -107,109 +132,7 @@ But let's not worry about the details of figure presentation yet, and focus on t
 * terrain is difficult
 * simple circle or doughnut models of limited utility
 
-# Materials and methods
 
-## Harvested area
-
-Canada's National Forest Inventory System (NFIS) is a product of the Canadian
-Council of Forest Ministers (CCFM).  One of the data sets provided by the NFIS
-identifies locations of forest harvesting across Canada for the years 1985-2015
-detected from Landsat satellite imagery.  These data are at a 30 m spatial 
-resolution.  The data were downloaded from
-https://opendata.nfis.org/downloads/forest_change/CA_forest_harvest_mask_year_1985_2015.zip
-(accessed 2020-03-05).
-The data set is described in @Hermosilla2016.
-  
-The data were clipped to the Alberta provincial boundary which was obtained from
-Altalis (https://www.altalis.com, accessed 2021-09-10), which manages much of the spatial information
-belonging to the Alberta government.
-  
-## Alberta township coverage
-  
-For our analysis, most of our information was aggregated to the township level.
-In Alberta, the legal description of any parcel of land uses the Alberta Township
-Survey System (see https://www.alberta.ca/alberta-township-survey-system.aspx, 
-accessed 2021-10-08). Most townships are roughly square in shape, with an average 
-area of about 9,533 ha.  The GIS coverage for township outlines was obtained 
-from Altalis (https://www.altalis.com, accessed 2021-09-10).
-
-The harvest areas obtained from the NFIS forest harvesting data set were
-aggregated to the township level so that the harvest area for each township
-in each of the years from 1985-2015 was recorded in a data set.
-
-  
-## Hypothetical plant locations and capacities
-
-For this study, we assumed that forest harvest residue processing would take place
-at a plant co-located with an existing forest products manufacturing facility.
-We used the Weyerhaeuser oriented strand board plant in Edson, the Millar Western
-Forest Products Ltd. pulp mill in Whitecourt, and the West Fraser pulp mill 
-in Hinton as the locations
-for the hypothetical forest residue processing facilities.
-
-As well as considering locations for the hypothetical plants, we considered
-3 different pland capacities: 200,000 odmt/yr corresponding to a small 
-wood pellet mill, 400,000 odmt/yr corresponding to a large pellet mill or
-a small ethanol plant, and 800,000 odmt/yr corresponding to a large ethanol 
-plant.
-
-  
-
-
-
-
-## Alberta road network
-  
-** A nice picture demonstrating dendritic nature of road network ** 
-   
-  * The provincial road network was sorted into four classes:
-
-    * primary provincial highways
-
-    * other paved roads
-
-    * two-lane gravel roads
-
-    * one-lane gravel or dirt roads
-
-  * Average speeds calculated using harmonic mean:
-    
-       $s_h= \left(\frac{s_u^{-1} + s_l^{-1}}{2}\right)^{-1}$
-  
-  * Speeds by road class, loaded and unloaded:
-
-    * primary provincial highways: loaded 80, unloaded 95, h-mean 85
-
-    * other paved roads: loaded 65, unloaded 80, h-mean 70
-
-    * two-lane gravel roads: loaded 50, unloaded 70, h-mean 60
-
-    * one-lane roads: loaded 20, unloaded 30, h-mean 25
-  
-## service areas
-
-  * Rasterized network areas were generated using the QGIS plugin, QNEAT3 (Iso-Area as Interpolation).
-  
-  * QGIS zonal statistics were used to calculate the median network travel time in each township.
-  
-  
-```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time from Edson, limited to 6 hours.", out.width = '100%'}
-knitr::include_graphics("../img/network_service.png")
-```
-  
-## Harvestable volume by township
-
-* based on NRCan 250 m data
-    * filtered merch vol >= 50
-    * Larches + birches <= 50
-    * age >= 80
-    * adjusted volumes to give average harvested volumes on West Fraser (Hinton).
-    Gives some locally adjusted volumes.  Kludgy, but maybe better than a
-    provincial average.
-
-# Theory/Calculation
-
-So here we set the constants.
 
 ```{r constants, echo=FALSE, include=FALSE}
 #hourly_truck_rate <- 175 + 225 + 40 #place holder.
@@ -240,15 +163,169 @@ odmt_adj_factor <-  0.10
 standing_time <- 20
 
 ```
+# Materials and methods
 
-Following @Roser2013, the pre-piling cost was set to \$`r prepiling_cost`/odmt,
-the comminution (*grinding ?*) cost was set to  \$`r comminution_cost`/odmt, and
-other costs were set to  \$`r other_cost`/odmt.  The total "constant" costs are 
- \$`r constant_cost`\$/odmt.
+## Harvested area
 
-Using *blah blah blah* , the truck rate was set to 
-\$`r truck_rate`/odmt/h. 
+Canada's National Forest Inventory System (NFIS) is a product of the Canadian
+Council of Forest Ministers (CCFM).  One of the data sets provided by the NFIS
+identifies locations of forest harvesting across Canada for the years 1985-2015
+detected from Landsat satellite imagery.  These data are at a 30 m spatial
+resolution.  The data were downloaded from
+https://opendata.nfis.org/downloads/forest_change/CA_forest_harvest_mask_year_1985_2015.zip
+(accessed 2020-03-05). The data set is described in Hermosilla *et al.* (2016)
+@Hermosilla2016.
+The data were clipped to the Alberta provincial boundary which was obtained from
+Altalis (https://www.altalis.com, accessed 2021-09-10), which manages much of
+the spatial information belonging to the Alberta government.
 
+## Alberta township coverage
+For our analysis, most of our information was aggregated to the township level.
+In Alberta, the legal description of any parcel of land uses the Alberta
+Township Survey System (see
+https://www.alberta.ca/alberta-township-survey-system.aspx, accessed
+2021-10-08). Most townships are roughly square in shape, with an average area of
+about 9,533 ha.  The GIS coverage for township outlines was obtained from
+Altalis (https://www.altalis.com, accessed 2021-09-10).
+The harvest areas obtained from the NFIS forest harvesting data set were
+aggregated to the township level so that the harvest area for each township in
+each of the years from 1985 to 2015 was recorded in a data set.
+
+## Hypothetical plant locations and capacities
+For this study, we assumed that forest harvest residue processing would take
+place at a plant co-located with an existing forest products manufacturing
+facility. We used the Weyerhaeuser oriented strand board plant in Edson, the
+Millar Western Forest Products Ltd. pulp mill in Whitecourt, and the West Fraser
+pulp mill in Hinton as the locations for the hypothetical forest residue
+processing facilities.
+
+As well as considering locations for the hypothetical plants, we considered 3
+different plant capacities: 200,000 odmt/yr corresponding to a small wood pellet
+mill, 400,000 odmt/yr corresponding to a large pellet mill or a small ethanol
+plant, and 800,000 odmt/yr corresponding to a large ethanol plant.
+
+## Administrative and ecological boundaries.
+
+### FMU map
+
+Many forest products companies operate in Alberta, and have different agreements
+with the government with respect to how the forest is managed.  Some companies
+have harvesting rights to just the needleleaf species, others have rights to
+just the broadleaf species, and some have rights to both needleleaf and
+broadleaf.
+
+Utilization standards in Alberta are specified on the basis of stump height,
+minimum stump diameter (outside bark), and minimum log length to a specified top
+diameter (inside bark).  Utilization standards vary by FMU.  Stump heights used
+in Alberta are 15 and 30 cm; stump diameters are 13 or 15 cm; top diameters are
+7, 10, 11, or 12 cm; and minimum log lengths are 2.44, 2.66, 2.67, 3.55, 3.76, 
+or 4.88 m.  These utilization standards are necessary to relate volumes 
+calculated to the 13/7 standard for the National Forest Inventory to the harvest
+volumes reported by the companies.  Perhaps most importantly, the minimum top
+diameter will have an effect on the volume of residue left in the forest 
+corresponding to the tops of trees.
+
+
+```{r FMU, echo=FALSE, fig.cap="Location of Forest Management Units in Alberta showing Green and White Areas.", out.width = '80%'}
+knitr::include_graphics("../img/FMU.png")
+```
+
+### Terrestrial ecozone map
+
+The NFIS' individual tree biomass calculator @NFIS2016 uses province, ecozone,species, dbh, and height as input variables, so ecozone is important.  It is based on 
+equations developed by Lambert
+*et al.* (2005) @Lambert2005.
+
+```{r ecozones, echo=FALSE, fig.cap="Terrestrial ecozones of Canada within Alberta.", out.width = '80%'}
+knitr::include_graphics("../img/ecozones.png")
+```
+Example output from the biomass calculator.
+
+```{r biomass calculator example, echo=FALSE, fig.cap="Biomass calculator example.", out.width = '80%'}
+knitr::include_graphics("../img/biomass_calc_example.png")
+```
+
+## Spatial variability in residual biomass production
+
+There is considerable spatial variability in the amount of timber harvest
+residues available for biomass collection.  The variability relates to the
+distribution of harvested species and age classes across the landscape, to the
+timber harvesting practices of different operators, and to other factors.
+We used the 250 m resolution raster maps of Canada's forest attributes for 2011
+from Natural Resources Canada @Beaudoin2017 to retrieve information on species
+composition, age classes, and merchantable volume.  The data were clipped to the
+Alberta boundary.  Merchantable volumes for Alberta in this dataset were
+compiled to a 13/7 utilization standard, meaning that stump height was assumed
+to be 30 cm, that stump diameter (outside bark) needed to be at least 13 cm, and
+that the length of the log to a 7 cm inside bark diameter must be at least 4.88
+m for a log to be merchantable.  This is one of the utilization standards used
+in Alberta and was used for Canada's National Forest Inventory (NFI henceforth)
+@Boudewyn2007.
+
+The first step was to identify cells that contained merchantable forest
+inventory. We selected cells that contained at least 50 m^3^/ha of merchantable
+volume, as that corresponds with merchantability limits specified in Alberta
+@Alberta2016. We filtered out cells with more than 50% crown closure of larch
+(*Larix spp.*) and birch (*Betula spp.*) as those genera are rarely harvested at
+a commercial scale in Alberta.  We filtered out cells with stand age less than
+80 years as it is unusual to harvest stands younger than that in Alberta.
+This filtered raster was "unioned" with the township coverage, and an average of
+the merchantable volume in the merchantable cells was calculated.  This volume
+was adjusted upwards by the ratio of the average volume per hectare harvested
+from the West Fraser (Hinton) Forest Management Agreement Area (FMA) to the
+average merchantable volume for each township calculated from the filtered
+raster and township coverages.  The multiplicative volume adjustment factor was
+calculated as `r sprintf("%5.2f",merch_vol_adj_factor)`.  
+
+**A little more explanation is needed..**
+
+Something about needleleaf and broadleaf trees.  Most common species harvested
+are white spruce (_Picea glauca_), lodgepole pine (*Pinus contorta* var.
+*latifolia*), trembling aspen (*Populus tremuloides*), and less commonly jack
+pine (*Pinus banksiana*), black spruce (*Picea mariana*), balsam poplar
+(*Populus balsamifera*), subalpine fir (*Abies lasiocarpa*), balsam fir (*Abies
+balsamea*), and Douglas-fir (*Pseudotsuga menziesii* var. *glauca*).
+
+## Service areas
+** A nice picture demonstrating dendritic nature of road network **
+* The provincial road network was sorted into four classes:
+* primary provincial highways
+* other paved roads
+* two-lane gravel roads
+* one-lane gravel or dirt roads
+* Average speeds calculated using harmonic mean:
+$s_h= \left(\frac{s_u^{-1} + s_l^{-1}}{2}\right)^{-1}$
+* Speeds by road class, loaded and unloaded:
+* primary provincial highways: loaded 80, unloaded 95, h-mean 85
+* other paved roads: loaded 65, unloaded 80, h-mean 70
+* two-lane gravel roads: loaded 50, unloaded 70, h-mean 60
+* one-lane roads: loaded 20, unloaded 30, h-mean 25
+* Rasterized network areas were generated using the QGIS plugin, QNEAT3
+(Iso-Area as Interpolation) @Raffler2018 .
+* QGIS zonal statistics were used to calculate the median network travel time in
+each township.
+
+
+  
+  
+```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time from Edson, limited to 6 hours.", out.width = '100%'}
+knitr::include_graphics("../img/network_service.png")
+```
+  
+
+
+# Theory/Calculation
+The GIS analysis for this paper was done using QGIS @QGISorg2021.  Data
+summaries and statistical analysis were done using R @R2021 using RStudio
+@RStudioTeam2021, and tidyverse @Wickham2019.
+So here we set the constants.
+Following @Roser2013, the pre-piling cost was set to `r
+sprintf("%5.2f",prepiling_cost)` \$/odmt, the comminution (*grinding ?*) cost
+was set to `r sprintf("%5.2f",comminution_cost)`  \$/odmt, and other costs were
+set to  `r sprintf("%5.2f",other_cost)` \$/odmt.  The total "constant" costs are
+`r sprintf("%5.2f",constant_cost)` \$/odmt.
+Using *blah blah blah* , the truck rate was set to `r
+sprintf("%5.2f",truck_rate)` \$/odmt/h.
 A 100 m³ trailer can haul `r odt_trailer` odmt of chipped residue.
 
 ```{r read_data_files, echo=FALSE}
@@ -275,10 +352,10 @@ t <- t %>%
 
 
 harv <- subset(t, harvest_ha > 0)
-head(harv)
-summary(harv$harvest_ha)
-summary(harv$harvest_vol) 
-summary(harv$adj_vol)
+#head(harv)
+#summary(harv$harvest_ha)
+#summary(garv$harvest_vol) 
+#summary(harv$adj_vol)
 
 #harv2 <- aggregate(harv$harvest_vol,by=list(Category=harv$year), FUN=sum)
 harv2 <- harv %>% group_by(year) %>%
@@ -286,27 +363,27 @@ harv2 <- harv %>% group_by(year) %>%
 # %>%
 #   mutate(hvol2=rollapply(harvest_vol,5,mean,align='left',fill=NA))
 
-summary(harv2$harvest_vol)
-harv2
+#summary(harv2$harvest_vol)
+#harv2
 
 harv3 <- read.csv(file = '../data/ABHarvestVol.csv') %>% filter(year >=1990)
-harv3 
+#harv3 
 
 harv4 <- merge(harv2, harv3, by = "year", all=TRUE)
 
-ggplot(data=harv4, aes(x=year)) +
-  geom_line(aes(y = harvest_vol), colour="darkred") +
-  geom_line(aes(y = harvvol), colour="steelblue") +
-  labs(x = "year") + labs(y = "harvest volume (million m3)")  +
-  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
-
-#2009 is the median harvest volume year for Alberta in 1990-2015
-
-ggplot(data=harv2, aes(x=year,y=harvest_vol)) +
-  labs(x = "year") +
-  labs(y = "harvest volume (million m3)") +
-  geom_line()  +
-  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
+# ggplot(data=harv4, aes(x=year)) +
+#   geom_line(aes(y = harvest_vol), colour="darkred") +
+#   geom_line(aes(y = harvvol), colour="steelblue") +
+#   labs(x = "year") + labs(y = "harvest volume (million m3)")  +
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
+# 
+# #2009 is the median harvest volume year for Alberta in 1990-2015
+# 
+# ggplot(data=harv2, aes(x=year,y=harvest_vol)) +
+#   labs(x = "year") +
+#   labs(y = "harvest volume (million m3)") +
+#   geom_line()  +
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
 # +
 #   scale_colour_viridis(discrete = TRUE) +
 #   theme(legend.position = "none") +
@@ -324,11 +401,11 @@ d$cycleTime <- 2* (d$value/3600) + standing_time/60
 d$residueCost <- d$cycleTime * truck_rate + prepiling_cost + comminution_cost + other_cost
 d <- select(d, -value)
 
-head(d)
+#head(d)
 
 big_joined <- inner_join(d,harv, by = "TRM")
-head(big_joined)
-tail(big_joined)
+#head(big_joined)
+#tail(big_joined)
 
 cum.odmt <- big_joined %>%
   arrange(location,year,cycleTime) %>%
@@ -337,13 +414,13 @@ cum.odmt <- big_joined %>%
 
 
 ```
-As a check, we obtained harvest levels for the period 1990-2018 from the National
-Forestry Database @ccfm2020 .  Note that in 1998, industrial salvage volumes of 369,791 m³ of 
-softwood and 264,647 m³ are not included in the harvest levels shown in the graph
+<!-- As a check, we obtained harvest levels for the period 1990-2018 from the National -->
+<!-- Forestry Database @ccfm2020 .  Note that in 1998, industrial salvage volumes of 369,791 m³ of  -->
+<!-- softwood and 264,647 m³ are not included in the harvest levels shown in the graph -->
 
-```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels", out.width = '100%'}
-knitr::include_graphics("../img/alberta_harvest.png")
-```
+<!-- ```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels", out.width = '100%'} -->
+<!-- knitr::include_graphics("../img/alberta_harvest.png") -->
+<!-- ``` -->
 
 
 
@@ -457,4 +534,4 @@ This research was supported by funding from the Canada First Research Excellence
 
 Dennis Gray contributed to data compilation.
 
-# Literature cited
+# Reference list
