@@ -24,6 +24,7 @@ header-includes:
   - \linenumbers
 output:
   html_document:
+    number_sections: yes
     df_print: paged
     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
@@ -74,7 +75,7 @@ Here's something that might help our writing.  It's got the headings that
 *Biomass and Bioenergy* wants and presents the main results based on our
 placeholder costs.  Author priority is not fixed.
 
-This is **really fucking bold**.
+
 
 
 
@@ -126,6 +127,9 @@ This is **really fucking bold**.
 
 ## Justification
 
+**Do we talk about the weaknesses of BRIMS and how we used 
+this to improve?**
+
 * renewable fuels better than fossil fuels
 * forest harvest residue just piled and burned
 * forest road networks in Alberta radiate from location
@@ -152,7 +156,7 @@ truck_rate <- hourly_truck_rate / odt_trailer
 prepiling_cost <- 6.30 # $/odt
 comminution_cost <- 25.60 # $/odt
 other_cost <- 8.48 # $/odt
-constant_cost <- prepiling_cost +  comminution_cost + other_cost # $/odmt
+constant_cost <- prepiling_cost +  comminution_cost + other_cost # $/Mg DM
 location <- c('Whitecourt','Edson','Hinton')
 capacity <- c(200000,400000,800000)
 
@@ -164,6 +168,8 @@ standing_time <- 20
 
 ```
 # Materials and methods
+
+
 
 ## Harvested area
 
@@ -192,6 +198,26 @@ aggregated to the township level so that the harvest area for each township in
 each of the years from 1985 to 2015 was recorded in a data set.
 
 ## Hypothetical plant locations and capacities
+There are a number of companies with Forest Management Agreement Areas
+located in or near Edson, Whitecourt, and Hinton.
+The West Fraser Mills Ltd. (Hinton) FMA is the primary timbershed for the
+Hinton Wood Products sawmill and the Hinton Pulp pulp mill.  The West Fraser
+Mills Ltd (Edson) FMA is the primary timbershed for the Edson Forest Products 
+sawmill.  The Weyerhaeuser Company Limited (Pembina Timberlands) FMA supplies 
+the Edson oriented strand board mill and the Drayton Valley sawmill.  The 
+Millar Western FMA supplies sawmills in Whitecourt and Fox Creek, a pulp mill
+in Whitecourt, and a specialty wood products facility and Acheson.  The Blue
+Ridge Lumber Inc. FMA supplies a sawmill in Blue Ridge, which is about 23 km 
+from Whitecourt.  The ANC Timber Ltd. FMA supplies logs to several sawmills in
+the area, in exchange for chips used to feed the Alberta Newsprint
+Company newsprint mill in Whitecourt.
+
+```{r west_central_ab, echo=FALSE, fig.cap="Location of Forest Management Agreement Areas serving Hinton, Edson, and Whitecourt.", out.width = '80%'}
+knitr::include_graphics("../img/west_central_AB_2.png")
+```
+
+
+
 For this study, we assumed that forest harvest residue processing would take
 place at a plant co-located with an existing forest products manufacturing
 facility. We used the Weyerhaeuser oriented strand board plant in Edson, the
@@ -200,9 +226,9 @@ pulp mill in Hinton as the locations for the hypothetical forest residue
 processing facilities.
 
 As well as considering locations for the hypothetical plants, we considered 3
-different plant capacities: 200,000 odmt/yr corresponding to a small wood pellet
-mill, 400,000 odmt/yr corresponding to a large pellet mill or a small ethanol
-plant, and 800,000 odmt/yr corresponding to a large ethanol plant.
+different plant capacities: 200,000 Mg DM/yr corresponding to a small wood pellet
+mill, 400,000 Mg DM/yr corresponding to a large pellet mill or a small ethanol
+plant, and 800,000 Mg DM/yr corresponding to a large ethanol plant.
 
 ## Administrative and ecological boundaries.
 
@@ -232,7 +258,10 @@ knitr::include_graphics("../img/FMU.png")
 
 ### Terrestrial ecozone map
 
-The NFIS' individual tree biomass calculator @NFIS2016 uses province, ecozone,species, dbh, and height as input variables, so ecozone is important.  It is based on 
+
+
+The NFIS' individual tree biomass calculator @NFIS2016 uses province, ecozone, 
+species, dbh, and height as input variables, so ecozone is important.  It is based on 
 equations developed by Lambert
 *et al.* (2005) @Lambert2005.
 
@@ -241,10 +270,14 @@ knitr::include_graphics("../img/ecozones.png")
 ```
 Example output from the biomass calculator.
 
-```{r biomass calculator example, echo=FALSE, fig.cap="Biomass calculator example.", out.width = '80%'}
+```{r biomass_calculator_example, echo=FALSE, fig.cap="Biomass calculator example.", out.width = '80%'}
 knitr::include_graphics("../img/biomass_calc_example.png")
 ```
 
+
+```{r taper, echo=FALSE, fig.cap="Volume calcualation example.", out.width = '80%'}
+knitr::include_graphics("../img/taper.png")
+```
 ## Spatial variability in residual biomass production
 
 There is considerable spatial variability in the amount of timber harvest
@@ -266,7 +299,7 @@ The first step was to identify cells that contained merchantable forest
 inventory. We selected cells that contained at least 50 m^3^/ha of merchantable
 volume, as that corresponds with merchantability limits specified in Alberta
 @Alberta2016. We filtered out cells with more than 50% crown closure of larch
-(*Larix spp.*) and birch (*Betula spp.*) as those genera are rarely harvested at
+(*Larix spp.* Mill.) and birch (*Betula spp.* L.) as those genera are rarely harvested at
 a commercial scale in Alberta.  We filtered out cells with stand age less than
 80 years as it is unusual to harvest stands younger than that in Alberta.
 This filtered raster was "unioned" with the township coverage, and an average of
@@ -280,33 +313,54 @@ calculated as `r sprintf("%5.2f",merch_vol_adj_factor)`.
 **A little more explanation is needed..**
 
 Something about needleleaf and broadleaf trees.  Most common species harvested
-are white spruce (_Picea glauca_), lodgepole pine (*Pinus contorta* var.
-*latifolia*), trembling aspen (*Populus tremuloides*), and less commonly jack
-pine (*Pinus banksiana*), black spruce (*Picea mariana*), balsam poplar
-(*Populus balsamifera*), subalpine fir (*Abies lasiocarpa*), balsam fir (*Abies
-balsamea*), and Douglas-fir (*Pseudotsuga menziesii* var. *glauca*).
+are white spruce (*Picea glauca* (Moench) Voss), lodgepole pine 
+(*Pinus contorta* var. *latifolia* Engelm.), jack pine 
+(*Pinus banksiana* Lamb.), trembling aspen (*Populus tremuloides* Michx.),
+and less commonly black spruce 
+(*Picea mariana* (Mill.) Britton, Sterns & Poggenburg), Engelmann spruce 
+(*Picea engelmannii* 
+Parry ex Engelm.),  balsam poplar
+(*Populus balsamifera* L.), 
+balsam fir (*Abies balsamea* (L.) Mill.),  
+subalpine fir (*Abies lasiocarpa* (Hooker) Nuttall), 
+and Rocky Mountain Douglas-fir 
+(*Pseudotsuga menziesii* var. *glauca*  (Mayr) Franco).
 
 ## Service areas
-** A nice picture demonstrating dendritic nature of road network **
-* The provincial road network was sorted into four classes:
-* primary provincial highways
-* other paved roads
-* two-lane gravel roads
-* one-lane gravel or dirt roads
-* Average speeds calculated using harmonic mean:
-$s_h= \left(\frac{s_u^{-1} + s_l^{-1}}{2}\right)^{-1}$
-* Speeds by road class, loaded and unloaded:
-* primary provincial highways: loaded 80, unloaded 95, h-mean 85
-* other paved roads: loaded 65, unloaded 80, h-mean 70
-* two-lane gravel roads: loaded 50, unloaded 70, h-mean 60
-* one-lane roads: loaded 20, unloaded 30, h-mean 25
+
+
+The provincial road network was sorted into four classes: primary highways,
+other paved roads, two-lane gravel roads, and one-lane gravel or dirt roads.  
+Loaded and unloaded travel speeds were assumed for each road class, according
+to the table below. The harmonic mean of loaded and unloaded speeds 
+(rounded to the nearest
+multiple of 5 km/h) were calculated as
+
+$s_h= \left(\frac{s_l^{-1} + s_u^{-1}}{2}\right)^{-1}$.
+
+Use of harmonic mean allows us to calculate the correct round trip travel time.
+
+
+| Road class      | loaded | unloaded | harmonic mean | 
+|:----------------|-------:|---------:|--------------:|
+| primary highways|    80  |       95 |           85  |
+| other paved     |    65  |       80 |           70  |
+| 2-lane gravel   |    50  |       70 |           60  | 
+| 1-lane gravel or dirt  |    20  |       30 |           25  | 
+| trail           |     ?  |       ?  |           ?   |
+
+
+Check out https://haozhu233.github.io/kableExtra/awesome_table_in_html.html to
+try to format this table better.
+
+
 * Rasterized network areas were generated using the QGIS plugin, QNEAT3
-(Iso-Area as Interpolation) @Raffler2018 .
+(Iso-Area as Interpolation) @Raffler2018. **How big are the cells?**
+
+
 * QGIS zonal statistics were used to calculate the median network travel time in
 each township.
 
-
-  
   
 ```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time from Edson, limited to 6 hours.", out.width = '100%'}
 knitr::include_graphics("../img/network_service.png")
@@ -318,15 +372,29 @@ knitr::include_graphics("../img/network_service.png")
 The GIS analysis for this paper was done using QGIS @QGISorg2021.  Data
 summaries and statistical analysis were done using R @R2021 using RStudio
 @RStudioTeam2021, and tidyverse @Wickham2019.
-So here we set the constants.
-Following @Roser2013, the pre-piling cost was set to `r
-sprintf("%5.2f",prepiling_cost)` \$/odmt, the comminution (*grinding ?*) cost
-was set to `r sprintf("%5.2f",comminution_cost)`  \$/odmt, and other costs were
-set to  `r sprintf("%5.2f",other_cost)` \$/odmt.  The total "constant" costs are
-`r sprintf("%5.2f",constant_cost)` \$/odmt.
-Using *blah blah blah* , the truck rate was set to `r
-sprintf("%5.2f",truck_rate)` \$/odmt/h.
-A 100 m³ trailer can haul `r odt_trailer` odmt of chipped residue.
+
+## Residue yield (Mg DM/ha) by township.
+
+1. Filter out unmerchantable cells from 250 m data
+   1. age < 80 years
+   2. merchantable volume < 50 m^3^/ha based on 13+/7 cm utilization standard
+   8. Bw + Lt prop > 50
+2. average merchantable volume of remaining cells to the township level
+3. adjust average inventory volume to harvested volume
+   - average volume/ha harvested from Hinton FMA / average volume/ha in merchantable inventory from Hinton FMA = 2.38
+
+
+
+## Cost calculations
+
+Following @Roser2013, the pre-piling cost was set to
+`r sprintf("%5.2f",prepiling_cost)` \$/Mg DM, the comminution (*grinding ?*) cost
+was set to `r sprintf("%5.2f",comminution_cost)`  \$/Mg DM, and other costs were
+set to  `r sprintf("%5.2f",other_cost)` \$/Mg DM.  The total "constant" costs are
+`r sprintf("%5.2f",constant_cost)` \$/Mg DM.
+Using *blah blah blah* , the truck rate was set to 
+`r sprintf("%5.2f",truck_rate)` \$/Mg DM/h.
+A 100 m³ trailer can haul `r odt_trailer` Mg DM of chipped residue.
 
 ```{r read_data_files, echo=FALSE}
 t <- read.csv(file = '../data/township_merchantable_volume.csv')
@@ -432,7 +500,7 @@ Some lovely supply curves
 
 
 p <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 odmt)") +
+  labs(x = "cumulative residue (1000 Mg DM)") +
   labs(y = "cycle time (hr)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -455,8 +523,8 @@ p
 
 ```{r more_supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
 ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 odmt)") +
-  labs(y = "marginal cost ($/odmt)") +
+  labs(x = "cumulative residue (1000 Mg DM)") +
+  labs(y = "marginal cost ($/Mg DM)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -487,7 +555,7 @@ t <- t %>%
 p <- ggplot(t,aes(factor(year),residueCost))  + 
   geom_tufteboxplot() +  
   facet_grid(cols=vars(location),rows=vars(capacity)) +
-  labs(y = "residue cost ($/odmt)", x="year") +
+  labs(y = "residue cost ($/Mg DM)", x="year") +
   scale_x_discrete(breaks=c("1990","","","","","1995","","","","","2000","","","","","2005","","","","","2010","","","","","2015")) +
   theme(axis.text.x = element_text(angle=90))
 p
@@ -506,7 +574,7 @@ avet <-t %>%
 
 ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
   labs(x = "year") +
-  labs(y = "average cost ($/odmt)") +
+  labs(y = "average cost ($/Mg DM)") +
   geom_line() +
   facet_grid(rows=vars(capacity)) +
   scale_y_continuous(limits=c(60,150)) 
@@ -518,7 +586,7 @@ ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
 
 Whitecourt is low cost for most years at all capacities.  Noticable spike in
 1999.  Probably due to Virginia Hills fire salvage.  Note that this spike
-also affects Hinton and Edson at 800,000 odmt capacity, because they reach into the 
+also affects Hinton and Edson at 800,000 Mg DM capacity, because they reach into the 
 Whitecourt area.
 
 As expected, residue costs are lower with lower capacities because they don't have to reach
