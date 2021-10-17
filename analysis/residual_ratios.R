@@ -32,7 +32,7 @@ twp_merch_vol <- twp_merch_vol %>% select(TRM, mean_merch_volume)
 t <- left_join(t,twp_merch_vol)
 
 t <- t %>%
-  mutate(util_std_volume = mean_merch_volume / prop_of_137 * 2.38) 
+  mutate(util_std_volume = mean_merch_volume / prop_of_137 * 2.77) 
 
 tConif <- t %>% filter(CD == "Conif")
 tDecid <- t %>% filter(CD == "Decid")

@@ -1,5 +1,5 @@
 ---
-title: Historical Supply of Biomass from Timber Harvest Residue in West-central Alberta, Canada
+title: Spatial and temporal variability in economic availability of residual biomass from timber harvest in west-central Alberta, Canada (1990-2015)
 author:
   - Glen W. Armstrong:
       institute:
@@ -23,16 +23,18 @@ header-includes:
   - \usepackage[left]{lineno}
   - \linenumbers
 output:
-  html_document:
-    number_sections: yes
-    df_print: paged
-    pandoc_args:
-      - '--lua-filter=scholarly-metadata.lua'
-      - '--lua-filter=author-info-blocks.lua'
   pdf_document:
+    includes:
+      in_header: "preamble.tex"
     number_sections: yes
     latex_engine: xelatex
     keep_tex: yes
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  html_document:
+    number_sections: yes
+    df_print: paged
     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
@@ -44,7 +46,7 @@ output:
 csl: biomass-and-bioenergy
 bibliography: historicalResidueSupply.bib
 ---
-
+\raggedright
 <!-- \fontfamily{cmr} -->
 <!-- \fontsize{12}{22} -->
 <!-- \fontseries{b} -->
@@ -71,21 +73,14 @@ library(ezknitr)
 
 # Introduction
 
-Here's something that might help our writing.  It's got the headings that
-*Biomass and Bioenergy* wants and presents the main results based on our
-placeholder costs.  Author priority is not fixed.
-
-
+1. **Focus on cost variability associated with transportation and forest  characteristics**
+2. **Based on historical harvest locations (1990-2015)**
 
 
 
 <!-- ## Some obvious citations -->
 
-<!-- @R2021 -->
 
-<!-- @Wickham2019 -->
-
-<!-- @qgis2021 -->
 
 <!-- @Onyango2019 -->
 
@@ -130,13 +125,17 @@ placeholder costs.  Author priority is not fixed.
 **Do we talk about the weaknesses of BRIMS and how we used 
 this to improve?**
 
+```{r BRIMS, echo=FALSE, fig.cap="BRIMS residue", out.width = '100%'}
+knitr::include_graphics("../img/BRIMS.png")
+```
+
 * renewable fuels better than fossil fuels
 * forest harvest residue just piled and burned
 * forest road networks in Alberta radiate from location
 * terrain is difficult
 * simple circle or doughnut models of limited utility
 
-
+# Materials and methods
 
 ```{r constants, echo=FALSE, include=FALSE}
 #hourly_truck_rate <- 175 + 225 + 40 #place holder.
@@ -156,18 +155,19 @@ truck_rate <- hourly_truck_rate / odt_trailer
 prepiling_cost <- 6.30 # $/odt
 comminution_cost <- 25.60 # $/odt
 other_cost <- 8.48 # $/odt
-constant_cost <- prepiling_cost +  comminution_cost + other_cost # $/Mg DM
+constant_cost <- prepiling_cost +  comminution_cost + other_cost # $·Mg^-1^ (DM)
 location <- c('Whitecourt','Edson','Hinton')
 capacity <- c(200000,400000,800000)
 
-merch_vol_adj_factor <- 2.38
+merch_vol_adj_factor <- 2.77 # based on a wild ass guess
+#merch_vol_adj_factor <- 2.38 #based on West Fraser Hinton
 odmt_adj_factor <-  0.10
 
 #get prop of dec/con by twp
 standing_time <- 20
 
 ```
-# Materials and methods
+
 
 
 
@@ -199,7 +199,7 @@ each of the years from 1985 to 2015 was recorded in a data set.
 
 ## Hypothetical plant locations and capacities
 There are a number of companies with Forest Management Agreement Areas
-located in or near Edson, Whitecourt, and Hinton.
+located near Edson, Whitecourt, and Hinton.
 The West Fraser Mills Ltd. (Hinton) FMA is the primary timbershed for the
 Hinton Wood Products sawmill and the Hinton Pulp pulp mill.  The West Fraser
 Mills Ltd (Edson) FMA is the primary timbershed for the Edson Forest Products 
@@ -216,8 +216,6 @@ Company newsprint mill in Whitecourt.
 knitr::include_graphics("../img/west_central_AB_2.png")
 ```
 
-
-
 For this study, we assumed that forest harvest residue processing would take
 place at a plant co-located with an existing forest products manufacturing
 facility. We used the Weyerhaeuser oriented strand board plant in Edson, the
@@ -226,9 +224,13 @@ pulp mill in Hinton as the locations for the hypothetical forest residue
 processing facilities.
 
 As well as considering locations for the hypothetical plants, we considered 3
-different plant capacities: 200,000 Mg DM/yr corresponding to a small wood pellet
-mill, 400,000 Mg DM/yr corresponding to a large pellet mill or a small ethanol
-plant, and 800,000 Mg DM/yr corresponding to a large ethanol plant.
+different plant capacities: 200 000 Mg/a (DM) corresponding to a small wood pellet
+mill, 400 000 Mg/a (DM) corresponding to a large pellet mill or a small ethanol
+plant, and 800 000 Mg/a (DM) corresponding to a large ethanol plant.
+
+```{r bb, echo=FALSE, fig.cap="Boreal Bioenergy--Obed.", out.width = '80%'}
+knitr::include_graphics("../img/BorealBioenergy.png")
+```
 
 ## Administrative and ecological boundaries.
 
@@ -347,7 +349,7 @@ Use of harmonic mean allows us to calculate the correct round trip travel time.
 | other paved     |    65  |       80 |           70  |
 | 2-lane gravel   |    50  |       70 |           60  | 
 | 1-lane gravel or dirt  |    20  |       30 |           25  | 
-| trail           |     ?  |       ?  |           ?   |
+| no road           |     2  |       2  |           2   |
 
 
 Check out https://haozhu233.github.io/kableExtra/awesome_table_in_html.html to
@@ -369,41 +371,181 @@ knitr::include_graphics("../img/network_service.png")
 
 
 # Theory/Calculation
+
+This is a second best analysis.  Detailed information on harvest volumes
+tied to spatial location is held by the provincial government as scale records.
+Real (as opposed to modelled) forest inventory information is collected by
+holders of forest management agreements as Alberta Vegetation Inventory.
+Despite the fact that forest harvesting occurs mostly on public land, the
+government considers this information to be the property of companies, and 
+requires the consent of companies to release it to researchers.  There are
+currently 21 Forest Management Agreements in Alberta.  Permission would need 
+to be obtained from the holders of each of those FMAs as well as smaller
+companies that operate sawmills.
+
 The GIS analysis for this paper was done using QGIS @QGISorg2021.  Data
-summaries and statistical analysis were done using R @R2021 using RStudio
+summaries and statistical analysis were done using R @R2021 with RStudio
 @RStudioTeam2021, and tidyverse @Wickham2019.
 
-## Residue yield (Mg DM/ha) by township.
+## Residue yield (Mg · ha^-1^ (DM)) by township.
+
+### Merchantable volume township 
 
 1. Filter out unmerchantable cells from 250 m data
    1. age < 80 years
    2. merchantable volume < 50 m^3^/ha based on 13+/7 cm utilization standard
    8. Bw + Lt prop > 50
 2. average merchantable volume of remaining cells to the township level
-3. adjust average inventory volume to harvested volume
-   - average volume/ha harvested from Hinton FMA / average volume/ha in merchantable inventory from Hinton FMA = 2.38
+3. adjust average inventory volume to actual harvested volume from the 
+national forestry database @CCFM2021.
+   - average volume/ha harvested / inventory volume = 2.77
+   
+### Tree characteristics
 
+Most of he forest management plans prepared by FMA holders include projections
+of average harvested pieces size, for both needleleafed and broadleafed trees,
+if relevant.  We used the piece size reported for the
+first 5-year period of the 200-year planning horizon. 
 
+We used the harvest piece sizes reported in the detailed forest management
+plans for the townships in each FMAA.  For those areas where piece size was
+not reported we assumed an average piece size of 0.278 m^3^ for needleleafed
+trees and 0.264 m^3^ for broadleafed trees.  These are the average of the values
+reported in the forest management plans.  These values are based on the 
+utilization
+standards used on the FMA.
+
+Utilization standards vary by FMA, and are specified as combinations of 
+stump height, stump diameter (outside bark), and minimum log length to a 
+specified top diameter.  Stump heights used include 15 cm and 30 cm; stump 
+diameters include 15 and 13 cm; top diameters include 12, 11, 10, and 7 cm;
+minimum log lengths include 2.44, 2.67, 3.66, 3.76, and 4.88 m.  For areas 
+outside of FMAAs we use 30 cm stump height, 15 cm minumum stump diameter, 11
+cm top for needleleafed trees and 10 cm top for broadleafed trees, and a 4.88
+m minimum log length.  These correspond to the default utilization standards
+specified in the Alberta timber harvest planning and operating ground rules
+@Alberta2016.
+
+Every township has a leading needleleafed and broadleafed species and
+a proportion of merchantable volume associated 
+with it derived from the 250 m resolution national inventory @Beaudoin2017.
+
+Ung *et al.* @Ung2013 present taper models and the associated coefficients
+for the tree species found in Canada.  These taper models can be used to
+find the diameter at any point along the main bole of a tree given species
+and diameter at breast height (DBH).  DBH is a commonly used tree measurement
+and is the diameter of the tree measured at 1.3 m above ground level, in
+most jurisdictions.  It is straightforward to determine cross-sectional area
+of the tree at any height.  Integrating this area function will yield volume
+between any two heights.
+
+\[
+d(d_b,h) = \left(d^2_{b} \frac{\beta_0 d_{b}^{\beta_1}}{\beta_0 d_{b}^{\beta_1} - 1.3} \left(\frac{h}{1.3}\right)^{2-\beta_2}\right)^{-2}
+\]
+
+where $d$ is the diameter (cm) at height $h$ (m), and $d_b$ is the diameter at
+breast height (1.3 m above ground level)
+
+Implicit in this equation is an equation for tree height
+
+\[
+H(d_b) = \beta_0 d_b ^ {\beta_1}
+\]
+
+The cross-sectional area equation
+
+\[
+a(d_b,h) = \pi \left(\frac{d(d_b,h)}{200}\right)^2
+\]
+
+\[
+v(d_b,h_s,h_t) = \int_{h_s}^{h_t}\pi \left(\frac{d(d_b,h)}{200}\right)^2dh
+\]
+
+The constant 200 is used to convert a diameter (cm) to a radius (m).  
+**find a way to reduce possible confusion with $d$**
+
+There is also a simple linear model relating outside bark to inside bark diameter.  The
+taper function is for outside bark diameter, but piece sizes are reported
+as inside bark volume.  Binary search is used to find the height associated
+with the inside bark diameter specified in the utilization standard.
+
+Every combination of township and FMU has a piece size for needleleafed and
+broadleafed associated with it, and the leading needleleafed and broadleafed 
+species.  We used a binary search procedure to find dbh and height of the 
+"average" broadleafed and needleleafed tree in each township based on the 
+companies utilization standard.  An average piece size to the 13+/7 utilization
+standard was also calculated by integrating the area function using the 
+appropriate limits.
+
+Using these equations, we are able to calculate wood volumes and bark volumes
+between any two heights along the tree stem.  We calculate the proportions 
+of total tree and bark volumes in the top of the tree.  We use this volume 
+proportion later to calculate biomass of stemwood and bark in the top.
+
+The number of harvested stems per ha is calculated by dividing the 13/7 volume
+per ha by the 13/7 piece size.
+
+### Individual tree biomass.
+
+Canada's national forest inventory website provides a useful individual
+tree biomass calculator @NFIS2016.  It calculates the biomass of tree 
+components (stem wood, stem bark, branches, foliage, and total) using
+province/territory, terrestrial ecozon, species, dbh, and tree height as input.
+It is possible to upload a file to the calculator so that the biomass of
+many trees can be calculated at once.  The calculator is based on work
+by Lambert *et al.* @Lambert2005.
+
+We assume that the residual biomass is in the stem wood and stem bark from the
+tops of the harvested trees and the branches and foliage.  The residual biomass
+from the tops is calculated using the total biomass of stem wood and stem bark
+adjusted by the volume proportions calculated above.
+
+### Township level biomass
+
+For both needleleaf and broadleaf, we multiply the residue associated with the
+individual tree by the number of harvested stems per ha.  We reduce this
+value using a recovery factor of 0.645 **??** following Peltola *et al.* 
+@Peltola2011, recognizing that some of the residual biomass will 
+be unrecoverable.
+
+```{r resdiue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'}
+knitr::include_graphics("../img/residue_per_ha.png")
+```
 
 ## Cost calculations
 
+
+```{r roser, echo=FALSE, fig.cap="Röser.", out.width = '100%'}
+knitr::include_graphics("../img/roser.png")
+```
+
+  
+```{r hourly_rates, echo=FALSE, fig.cap="Hourly rates for forestry equipment.", out.width = '100%'}
+knitr::include_graphics("../img/hourly_rates.png")
+```
+  
+
+
 Following @Roser2013, the pre-piling cost was set to
-`r sprintf("%5.2f",prepiling_cost)` \$/Mg DM, the comminution (*grinding ?*) cost
-was set to `r sprintf("%5.2f",comminution_cost)`  \$/Mg DM, and other costs were
-set to  `r sprintf("%5.2f",other_cost)` \$/Mg DM.  The total "constant" costs are
-`r sprintf("%5.2f",constant_cost)` \$/Mg DM.
+`r sprintf("%5.2f",prepiling_cost)` \$·Mg^-1^ (DM), the comminution (*grinding ?*) cost
+was set to `r sprintf("%5.2f",comminution_cost)`  \$·Mg^-1^ (DM), and other costs were
+set to  `r sprintf("%5.2f",other_cost)` \$·Mg^-1^ (DM).  The total "constant" costs are
+`r sprintf("%5.2f",constant_cost)` \$·Mg^-1^ (DM).
 Using *blah blah blah* , the truck rate was set to 
-`r sprintf("%5.2f",truck_rate)` \$/Mg DM/h.
-A 100 m³ trailer can haul `r odt_trailer` Mg DM of chipped residue.
+`r sprintf("%5.2f",truck_rate)` \$·Mg^-1^ (DM)/h.
+A 100 m³ trailer can haul `r odt_trailer` Mg (DM) of chipped residue.
 
 ```{r read_data_files, echo=FALSE}
+newAB <- read.csv(file = '../data/AlbertaHarvestLevels.csv',
+                  fileEncoding = 'UTF-8-BOM')
 t <- read.csv(file = '../data/township_merchantable_volume.csv')
 twp_merch_vol <- t %>% select(c(TRM,mean_merch_volume)) 
 twp_merch_vol$adj_vol <- twp_merch_vol$mean_merch_volume * merch_vol_adj_factor
 #twp_merch_vol$residue_odmt <- twp_merch_vol$adj_vol * odmt_adj_factor
 load("../data/biomass_by_trm.RData")
-twp_merch_vol <- merge(twp_merch_vol,biomass_by_trm,by = "TRM", all = TRUE)
-twp_merch_vol <- twp_merch_vol %>% 
+twp_merch_vol_temp <- merge(twp_merch_vol,biomass_by_trm,by = "TRM", all = TRUE)
+twp_merch_vol <- twp_merch_vol_temp %>% 
   mutate(adj_factor = res_total/adj_vol)
 
 mean(twp_merch_vol$adj_factor)
@@ -413,6 +555,7 @@ t <- subset(t, select = c(TRM,year,harvest_ha)) %>% filter(year >=1990)
 t <- merge(t, twp_merch_vol, by = "TRM", all=TRUE)
 t$adj_vol <- t$adj_vol %>% replace_na(0)  # there is an NAs problem here.  replace NAs with average.
                                               # is that the right way to do it?
+t$unadj_harvest_vol <-t$harvest_ha * t$mean_merch_volume
 t$harvest_vol <- t$harvest_ha * t$adj_vol 
 t$residue_odmt <- t$harvest_ha * t$res_total
 t <- t %>% 
@@ -427,36 +570,52 @@ harv <- subset(t, harvest_ha > 0)
 
 #harv2 <- aggregate(harv$harvest_vol,by=list(Category=harv$year), FUN=sum)
 harv2 <- harv %>% group_by(year) %>%
-  summarise(harvest_vol = sum(harvest_vol)) 
+  summarise(harvest_vol = sum(harvest_vol),
+            unadj_harvest_vol = sum(unadj_harvest_vol))
+
 # %>%
 #   mutate(hvol2=rollapply(harvest_vol,5,mean,align='left',fill=NA))
 
 #summary(harv2$harvest_vol)
 #harv2
-
-harv3 <- read.csv(file = '../data/ABHarvestVol.csv') %>% filter(year >=1990)
-#harv3 
-
-harv4 <- merge(harv2, harv3, by = "year", all=TRUE)
-
-# ggplot(data=harv4, aes(x=year)) +
+# ggplot(data=harv2, aes(x=year)) +
 #   geom_line(aes(y = harvest_vol), colour="darkred") +
-#   geom_line(aes(y = harvvol), colour="steelblue") +
+# #  geom_line(aes(y = harvvol), colour="steelblue") +
 #   labs(x = "year") + labs(y = "harvest volume (million m3)")  +
-#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
-# 
-# #2009 is the median harvest volume year for Alberta in 1990-2015
-# 
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6))
+
+#2009 is the median harvest volume year for Alberta in 1990-2015
+
 # ggplot(data=harv2, aes(x=year,y=harvest_vol)) +
 #   labs(x = "year") +
 #   labs(y = "harvest volume (million m3)") +
 #   geom_line()  +
-#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) 
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6))
 # +
 #   scale_colour_viridis(discrete = TRUE) +
 #   theme(legend.position = "none") +
 #   facet_grid(cols=vars(location)) +
 #   scale_x_continuous(limits=c(0,800000),labels = label_number(scale = 1/1000))
+harv3 <- read.csv(file = '../data/ABHarvestVol.csv') %>% filter(year >=1990)
+#harv3 
+
+harv4 <- merge(harv2, harv3, by = "year", all=TRUE)
+harv5 <- merge(harv4, newAB, by = "year", all=TRUE)
+
+harv_comparison <- ggplot(data=harv5, aes(x=year,y=harvest_vol, colour="Estimated harvest")) +
+  labs(x = "year") +
+  labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
+  geom_line()  +
+  geom_line(aes(y=total, colour="Actual harvest"))  +
+  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6))
+# +
+#   scale_colour_viridis(discrete = TRUE) +
+#   theme(legend.position = "none") +
+#   facet_grid(cols=vars(location)) +
+#   scale_x_continuous(limits=c(0,800000),labels = label_number(scale = 1/1000))
+# 
+# head(harv4)
+
 
 
 t <- read.csv(file = '../data/interpolated_median_oneway_times_seconds.csv')
@@ -482,14 +641,23 @@ cum.odmt <- big_joined %>%
 
 
 ```
-<!-- As a check, we obtained harvest levels for the period 1990-2018 from the National -->
-<!-- Forestry Database @ccfm2020 .  Note that in 1998, industrial salvage volumes of 369,791 m³ of  -->
-<!-- softwood and 264,647 m³ are not included in the harvest levels shown in the graph -->
 
-<!-- ```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels", out.width = '100%'} -->
-<!-- knitr::include_graphics("../img/alberta_harvest.png") -->
-<!-- ``` -->
+As a check, we obtained harvest volumes from Alberta for the period 1990-2015 
+from the national
+forestry database @CCFM2021.  
+Note that in 1998, industrial salvage volumes of 369 791 m^3^ of
+softwood and 264 647 m^3^ are not included in the harvest levels 
+shown in the graph.
 
+```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels compared with estimated.", out.width = '100%'}
+#knitr::include_graphics("../img/alberta_harvest.png")
+harv_comparison
+```
+
+
+```{r harvbyowner, echo=FALSE, fig.cap="NFDP harvest levels by ownership.", out.width = '100%'}
+knitr::include_graphics("../img/harvestbyowner.png")
+```
 
 
 Some lovely supply curves
@@ -500,7 +668,7 @@ Some lovely supply curves
 
 
 p <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 Mg DM)") +
+  labs(x = "cumulative residue (1000 Mg (DM))") +
   labs(y = "cycle time (hr)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -523,8 +691,8 @@ p
 
 ```{r more_supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
 ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 Mg DM)") +
-  labs(y = "marginal cost ($/Mg DM)") +
+  labs(x = "cumulative residue (1000 Mg (DM))") +
+  labs(y = "marginal cost ($·Mg^-1^ (DM))") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -555,7 +723,7 @@ t <- t %>%
 p <- ggplot(t,aes(factor(year),residueCost))  + 
   geom_tufteboxplot() +  
   facet_grid(cols=vars(location),rows=vars(capacity)) +
-  labs(y = "residue cost ($/Mg DM)", x="year") +
+  labs(y = "residue cost ($·Mg^-1^ (DM))", x="year") +
   scale_x_discrete(breaks=c("1990","","","","","1995","","","","","2000","","","","","2005","","","","","2010","","","","","2015")) +
   theme(axis.text.x = element_text(angle=90))
 p
@@ -574,7 +742,7 @@ avet <-t %>%
 
 ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
   labs(x = "year") +
-  labs(y = "average cost ($/Mg DM)") +
+  labs(y = "average cost ($·Mg^-1^ (DM))") +
   geom_line() +
   facet_grid(rows=vars(capacity)) +
   scale_y_continuous(limits=c(60,150)) 
@@ -586,7 +754,8 @@ ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
 
 Whitecourt is low cost for most years at all capacities.  Noticable spike in
 1999.  Probably due to Virginia Hills fire salvage.  Note that this spike
-also affects Hinton and Edson at 800,000 Mg DM capacity, because they reach into the 
+also affects Hinton and Edson at 800 000 Mg/a (DM) capacity, 
+because they reach into the 
 Whitecourt area.
 
 As expected, residue costs are lower with lower capacities because they don't have to reach
@@ -598,8 +767,17 @@ so far out.
 
 # Acknowledgements
 
-This research was supported by funding from the Canada First Research Excellence Fund as part of the University of Alberta’s Future Energy Systems research initiative.
+This research was supported by funding from the Canada First Research Excellence
+Fund as part of the University of Alberta’s Future Energy Systems 
+research initiative
+<!-- (Project # CFREF-2015-00001) -->
+.
 
 Dennis Gray contributed to data compilation.
+
+We work with a group of talented people.  Thanks to Marty Luckert, Feng Qiu,
+Grant Hauer, and Wenbei Zhang for helpful discussion.
+
+
 
 # Reference list
