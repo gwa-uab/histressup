@@ -15,21 +15,17 @@ author:
       institute: 
         - rees
 institute:
-  - rr : Department of Renewable Resources, University of Alberta
-  - rees: Department of Resource Economics and Environmental Sociology, University of Alberta
+  - rr : Department of Renewable Resources, University of Alberta, Edmonton AB  T6G 2H1, Canada
+  - rees: Department of Resource Economics and Environmental Sociology, University of Alberta, Edmonton AB  T6G 2H1, Canada
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 #date: "2021-10-05"
 header-includes:
   - \usepackage[left]{lineno}
   - \linenumbers
 output:
-  pdf_document:
-    includes:
-      in_header: "preamble.tex"
-    number_sections: yes
-    latex_engine: xelatex
-    keep_tex: yes
-    pandoc_args:
+  word_document:
+     number_sections: yes
+     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
   html_document:
@@ -38,8 +34,13 @@ output:
     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
-  word_document:
-     pandoc_args:
+  pdf_document:
+    includes:
+      in_header: "preamble.tex"
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+    pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
 #csl: canadian-journal-of-forest-research
@@ -77,22 +78,13 @@ library(ezknitr)
 2. **Based on historical harvest locations (1990-2015)**
 
 
-
 <!-- ## Some obvious citations -->
 
-
-
-<!-- @Onyango2019 -->
-
 <!-- @Carriquiry2011 -->
-
-<!-- @Miles2009 -->
 
 <!-- @Dessbesell2017 -->
 
 <!-- @Dymond2010 -->
-
-<!-- @Lambert2005 -->
 
 <!-- @Lo2021 -->
 
@@ -116,18 +108,10 @@ library(ezknitr)
 
 <!-- @Acuna2019 -->
 
-<!-- @Boudewyn2007 -->
 
-<!-- @Peltola2011 -->
 
 ## Justification
 
-**Do we talk about the weaknesses of BRIMS and how we used 
-this to improve?**
-
-```{r BRIMS, echo=FALSE, fig.cap="BRIMS residue", out.width = '100%'}
-knitr::include_graphics("../img/BRIMS.png")
-```
 
 * renewable fuels better than fossil fuels
 * forest harvest residue just piled and burned
@@ -137,84 +121,153 @@ knitr::include_graphics("../img/BRIMS.png")
 
 # Materials and methods
 
-```{r constants, echo=FALSE, include=FALSE}
-#hourly_truck_rate <- 175 + 225 + 40 #place holder.
-# info fromhttps://www.rogerstrucking.ca/services/rates-and-equipment/62-tractor-truck-hourly-rates
-# 175 $/hr for tractor, 225 for walking floor trailer, 40 for operator
 
-#hourly_truck_rate <- 175 # adjusted from Roger's numbers to be more in line with Roeser
-trailer_capacity <- 100 #m^3 from https://www.newtontrailers.com/trailer_hire/biomass_moving_floor_trailer/-/54/0
-hourly_truck_rate <- 175 #$/hr
-solid_volume_factor <- 0.4 #from fortsv5
-adj_trailer_capacity <- trailer_capacity * solid_volume_factor
-specific_gravity <- 0.38 #lodgepole pine
-odt_trailer <- specific_gravity * adj_trailer_capacity
-truck_rate <- hourly_truck_rate / odt_trailer
 
-#truck_rate <- 6.43 # $/odt/hr
-prepiling_cost <- 6.30 # $/odt
-comminution_cost <- 25.60 # $/odt
-other_cost <- 8.48 # $/odt
-constant_cost <- prepiling_cost +  comminution_cost + other_cost # $·Mg^-1^ (DM)
-location <- c('Whitecourt','Edson','Hinton')
-capacity <- c(200000,400000,800000)
+## Data sources
 
-merch_vol_adj_factor <- 2.77 # based on a wild ass guess
-#merch_vol_adj_factor <- 2.38 #based on West Fraser Hinton
-odmt_adj_factor <-  0.10
+We used a number of publicly available datasets to develop the datasets
+used in our analysis.  Most of the data are freely available from the World
+Wide Web (WWW). Much of the data processing required for this study was 
+manipulation of spatial
+data.  This was done using the QGIS software @QGISorg2021.
+All national level data were clipped to the Alberta provincial boundary
+for further analysis.
 
-#get prop of dec/con by twp
-standing_time <- 20
+The datasets are only introduced here.  The way they are used will be discussed
+in detail later.
 
+### Altalis
+
+Altalis manages much of the spatial data created by or for the Government of
+Alberta.  We use several coverages from their base features database product 
+@Altalis2021:
+the provincial, green/white area, forest management unit (FMU), forest management
+agreement area (FMAA), Alberta Township Survey System
+township, and town
+boundaries.
+
+The Alberta Township Survey System (ATS) is particularly important to this study
+as all the data used for this study are aggregated or disaggregated to the
+township level.  ATS provides the basis for legal land descriptions in Alberta.
+The typical township is roughly square (9.778 km by 9.716 km, 9 500 ha) and 
+is indexed by
+township (1--126), range (1--30), and meridian (4--6) numbers.  
+The townships immediately east of
+Alberta's western boundary, and immediately east of the 5^th^ and 6^th^
+meridians (corresponding to 114°W and 118°W longitude, respectively) are 
+partial townships and therefore deviate from the roughly square shape.  ATS
+is described in detail by the Alberta Land Surveyor's Association @ALSA2021.
+
+
+
+### Alberta Geospatial Services
+
+Alberta Geospatial Services is operated by the Alberta Ministry of Environment
+and Parks @Alberta2021a.  We obtained the road access coverages from here.  The
+road access coverages available from Altalis do not have as detailed information
+on road class as those available from Alberta Geospatial Services.
+
+### National Forest Information System
+
+As part of Canada's National Forest Inventory, the National Forest Information
+System (NFIS) provides a web-based individual tree biomass calculator @NFIS2021. 
+It 
+is used to calculate stem wood, stem bark, branch, and foliage biomass for 
+a tree based on province, ecozone, species, diameter at breast height (dbh) and
+height.  It is possible to upload a file representing many trees with different
+combinations of these input parameters and download a file containing the
+calculated results for all the trees.
+
+NFIS has also produced a set of spatial data layers representing forest 
+properties at a 250 m resolution for all of Canada @Beaudoin2017.  We used the
+merchantable volume, stand age, and species composition attributes from these 
+data layers.  
+
+Another product of NFIS is a set of spatial datasets derived from satellite data 
+@NFIS2021b.  The dataset used for this study is the harvest year data set for
+the years 1985-2015.  The dataset is described in detail by Hermosilla *et al.*
+@Hermosilla2016.  Essentially, it consists of a raster for Canada at 30 m 
+resolution indicating the year of harvest for each cell.
+
+### Natural Resources Canada
+
+For our study, the most important product of Natural Resources Canada is
+the Ung *et al.* paper @Ung2013 which describes the tree taper models 
+developed for Canada.  A valuable contribution related to this is the WWW-based
+wood volume calculator that uses those models @NRCan2015.  It is helpful for
+understanding how taper functions work.
+
+### National Forestry Database
+
+The national forestry database @CCFM2020 was used to summarize the 
+timber harvest volume from
+Alberta for the years 1990-2015.
+
+### Forest management plans
+
+The Alberta government requires FMA holders to develop a forest management
+plan for their FMAA.
+The forest management plans were used to get information on utilization 
+standards and piece size of harvested trees @Alberta2021. 
+
+
+### Miscellaneous
+
+The map of provincial boundaries comes from Statistics Canada @Canada2016.
+
+The boundaries of Canada's terrestrial ecozones, which are important inputs to
+the biomass calculator can be found on Agriculture and Agri-Food Canada's
+web site @Canada2017.
+
+
+## Study area
+
+Alberta is a province in western Canada.  It occupies 661 848 km^2^.
+Its southern border is 49°N latitude, northern border is 60°N latitude,
+eastern border is 110°W longitude, and its western boundary is defined by
+120°W longitude and the Great Divide of the Rocky Mountains.
+
+```{r canada, echo=FALSE, fig.cap="Location of Alberta in Canada.", out.width = '80%'}
+knitr::include_graphics("../img/canada.png")
 ```
 
+The southeastern part of the province is largely privately owned agricultural
+land, but the northern and western parts are largely publicly owned forest land.
+There is a substantial area of privately owned agricultural land
+in the Peace River Country of northwestern Alberta.  
+There are also substantial areas
+in National Parks along the Rocky Mountains and in the far north of the 
+province.  The province calls the area of mostly publicly owned forest land 
+as the Green Area, and the area of mostly privately owned agricultural land 
+as the White Area.  About 90% of the harvested timber volume in Alberta
+comes from the Green Area.
 
+For administrative purposes, the Green Area is divided into Forest Management
+Units (FMUs).  The province also enters into long term agreements with forestry
+companies giving the companies the rights to timber harvest and the 
+responsibility to manage the forest sustainably.  These agreements are
+called Forest Management Agreements, and the areas under agreement are
+called Forest Management Agreement Areas (FMAAs).  For the most part, the
+boundaries of the FMAAs are now coincident with FMU boundaries, with
+the exception that the Alberta-Pacific FMAA in eastern Alberta comprises
+12 FMUs.
+<!-- FMAAs occupy 62% of the Green Area **and maybe something about proportion of -->
+<!-- harvest** -->
 
+Our focus for this study is the forest near Hinton, Edson, and Whitecourt in 
+west-central Alberta.  These towns were chosen as they host several
+forest products companies and are located near very active FMAAs.
+We assume that it would be likely that a forest residue processing plant
+would be located near an existing forest products mill as the forest road
+network has been developed to supply those mills, and location of a residue
+plant near a forest products mill would also allow for access to 
+mill residues.  Figure ?? shows the location of the three towns in 
+relation to FMAAs and the Green and White Areas.
 
-## Harvested area
-
-Canada's National Forest Inventory System (NFIS) is a product of the Canadian
-Council of Forest Ministers (CCFM).  One of the data sets provided by the NFIS
-identifies locations of forest harvesting across Canada for the years 1985-2015
-detected from Landsat satellite imagery.  These data are at a 30 m spatial
-resolution.  The data were downloaded from
-https://opendata.nfis.org/downloads/forest_change/CA_forest_harvest_mask_year_1985_2015.zip
-(accessed 2020-03-05). The data set is described in Hermosilla *et al.* (2016)
-@Hermosilla2016.
-The data were clipped to the Alberta provincial boundary which was obtained from
-Altalis (https://www.altalis.com, accessed 2021-09-10), which manages much of
-the spatial information belonging to the Alberta government.
-
-## Alberta township coverage
-For our analysis, most of our information was aggregated to the township level.
-In Alberta, the legal description of any parcel of land uses the Alberta
-Township Survey System (see
-https://www.alberta.ca/alberta-township-survey-system.aspx, accessed
-2021-10-08). Most townships are roughly square in shape, with an average area of
-about 9,533 ha.  The GIS coverage for township outlines was obtained from
-Altalis (https://www.altalis.com, accessed 2021-09-10).
-The harvest areas obtained from the NFIS forest harvesting data set were
-aggregated to the township level so that the harvest area for each township in
-each of the years from 1985 to 2015 was recorded in a data set.
-
-## Hypothetical plant locations and capacities
-There are a number of companies with Forest Management Agreement Areas
-located near Edson, Whitecourt, and Hinton.
-The West Fraser Mills Ltd. (Hinton) FMA is the primary timbershed for the
-Hinton Wood Products sawmill and the Hinton Pulp pulp mill.  The West Fraser
-Mills Ltd (Edson) FMA is the primary timbershed for the Edson Forest Products 
-sawmill.  The Weyerhaeuser Company Limited (Pembina Timberlands) FMA supplies 
-the Edson oriented strand board mill and the Drayton Valley sawmill.  The 
-Millar Western FMA supplies sawmills in Whitecourt and Fox Creek, a pulp mill
-in Whitecourt, and a specialty wood products facility and Acheson.  The Blue
-Ridge Lumber Inc. FMA supplies a sawmill in Blue Ridge, which is about 23 km 
-from Whitecourt.  The ANC Timber Ltd. FMA supplies logs to several sawmills in
-the area, in exchange for chips used to feed the Alberta Newsprint
-Company newsprint mill in Whitecourt.
-
-```{r west_central_ab, echo=FALSE, fig.cap="Location of Forest Management Agreement Areas serving Hinton, Edson, and Whitecourt.", out.width = '80%'}
-knitr::include_graphics("../img/west_central_AB_2.png")
-```
+The FMAAs which supply most of the timber to mills in our near our three 
+locations are West Fraser Mills Ltd. (Hinton), West Fraser Mills Ltd. (Edson),
+Weyerhaeuser Company Limited (Pembina Timberlands), Millar Western, Blue
+Ridge Lumber Inc., and ANC Timber Ltd.
 
 For this study, we assumed that forest harvest residue processing would take
 place at a plant co-located with an existing forest products manufacturing
@@ -224,17 +277,131 @@ pulp mill in Hinton as the locations for the hypothetical forest residue
 processing facilities.
 
 As well as considering locations for the hypothetical plants, we considered 3
-different plant capacities: 200 000 Mg/a (DM) corresponding to a small wood pellet
-mill, 400 000 Mg/a (DM) corresponding to a large pellet mill or a small ethanol
-plant, and 800 000 Mg/a (DM) corresponding to a large ethanol plant.
+different plant capacities: 200 000 Mg/a  corresponding to a small wood pellet
+mill, 400 000 Mg/a  corresponding to a large pellet mill or a small ethanol
+plant, and 800 000 Mg/a  corresponding to a large ethanol plant.
 
-```{r bb, echo=FALSE, fig.cap="Boreal Bioenergy--Obed.", out.width = '80%'}
-knitr::include_graphics("../img/BorealBioenergy.png")
+
+
+
+```{r studyarea, echo=FALSE, fig.cap="Location of hypothetical residue processing plants in relation to FMAA boundaries and the Green and White Areas of Alberta.", out.width = '80%'}
+knitr::include_graphics("../img/study_area.png")
 ```
 
-## Administrative and ecological boundaries.
+## Harvested area
 
-### FMU map
+The areas harvested in Alberta in 2009 according to NFIS @NFIS2021b
+@Hermosilla2016 are shown in relationship to the three towns and 
+the Green Area in Figure 3.  Our data set includes harvest areas for the
+years 1990--2015, so this is just an example.
+
+
+
+```{r cutblocks2009, echo=FALSE, fig.cap="Harvest areas for 2009.", out.width = '80%'}
+knitr::include_graphics("../img/cutblocks2009.png")
+```
+
+Figure 4 shows the proportion of the township area harvested in 2009 aggregated
+to the township level, showing only those townships where the proportion of
+the township area harvested was greater than 0.001.  For each township, and
+each of the years between 1990 and 2015, we store the area harvested (ha) for
+use in our analysis.  We can see from this map that a great deal of timber
+harvest took place near our plant locations in 2009.
+
+```{r harvesttwp, echo=FALSE, fig.cap="Harvest areas for 2009 with aggregated to township level.  Only those townships where the proportion of total area harvested was 0.001 or greater are shown", out.width = '80%'}
+knitr::include_graphics("../img/harvesttwp.png")
+```
+
+
+## Cycle time estimates
+
+
+The provincial road network was sorted into four classes: primary highways,
+other paved roads, two-lane gravel roads, and one-lane gravel or dirt roads.  
+Loaded and unloaded travel speeds were assumed for each road class, according
+to the table below. The harmonic mean of loaded and unloaded speeds 
+(rounded to the nearest
+multiple of 5 km/h) were calculated as
+\begin{equation}
+\bar{s_h}= \left(\frac{s_l^{-1} + s_u^{-1}}{2}\right)^{-1}
+\end{equation}
+where $s_l$ is the loaded speed and $s_u$ is the unloaded speed.
+Use of harmonic mean allows us to calculate the correct  cycle time:  the
+time required to travel from the mill, to the collection site in the forest,
+and back to the mill.  This provides the basis for our estimates of haul cost.
+Calculating average haul speed using an arithmetic mean leads to a biased
+estimate of cycle time.
+
+
+| Road class      | loaded | unloaded | harmonic mean | 
+|:----------------|-------:|---------:|--------------:|
+| primary highways|    80  |       95 |           85  |
+| other paved     |    65  |       80 |           70  |
+| 2-lane gravel   |    50  |       70 |           60  | 
+| 1-lane gravel or dirt  |    20  |       30 |           25  | 
+| no road           |     2  |       2  |           2   |
+
+
+<!-- Check out https://haozhu233.github.io/kableExtra/awesome_table_in_html.html to -->
+<!-- try to format this table better. -->
+
+Figure 6 illustrates the road network in Alberta and estimates of one-way haul
+time based on the average of loaded and unloaded speeds from Table ??. The
+road network in the White Area of the province is very dense and largely arranged
+as a grid related to the Alberta Township Survey System.  Most of the roads
+in the White Area are public.  The road network in the Green Area is much
+less dense and many of the roads are built and maintained by resource industries 
+(*e.g.* forestry and petroleum & natural gas).  The one-way haul times were
+generated using the QGIS plugin, QNEAT3
+(Iso-Area as Interpolation) @Raffler2018.
+QGIS zonal statistics were used to calculate the median network travel time to
+each township, from each of our three towns.  The one-way travel time in Figure
+6 was limited to 6 hours because this equates to a 13 hour cycle time if
+you assume 1 hour for loading and unloading.  In Alberta, drivers of commercial
+vehicles are not permitted to drive more than 13 hours in a day.  **technically
+we could take the picture out to 6.5 hours, as the loading and unloading time
+does not count as driving time.  There is an on-duty limit of 14 hours**.
+
+  
+```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time (right) from Edson, limited to 6 hours.", out.width = '100%'}
+knitr::include_graphics("../img/network_service.png")
+```
+  
+
+
+
+```{r constants, echo=FALSE, include=FALSE}
+#hourly_truck_rate <- 175 + 225 + 40 #place holder.
+# info fromhttps://www.rogerstrucking.ca/services/rates-and-equipment/62-tractor-truck-hourly-rates
+# 175 $/hr for tractor, 225 for walking floor trailer, 40 for operator
+
+#hourly_truck_rate <- 175 # adjusted from Roger's numbers to be more in line with Roeser
+trailer_capacity <- 100 #m^3 from https://www.newtontrailers.com/trailer_hire/biomass_moving_floor_trailer/-/54/0
+hourly_truck_rate <- 175.90 #$/hr
+#solid_volume_factor <- 0.4 #from fortsv5
+solid_volume_factor <- 0.3 #from fortsv5
+adj_trailer_capacity <- trailer_capacity * solid_volume_factor
+specific_gravity <- 0.38 #lodgepole pine
+odt_trailer <- specific_gravity * adj_trailer_capacity
+truck_rate <- hourly_truck_rate / odt_trailer
+
+#truck_rate <- 6.43 # $/odt/hr
+prepiling_cost <- 6.30 # $/odt
+comminution_cost <- 25.60 # $/odt
+other_cost <- 8.48 # $/odt
+constant_cost <- prepiling_cost +  comminution_cost + other_cost # $·Mg^-1^ 
+location <- c('Whitecourt','Edson','Hinton')
+capacity <- c(200000,400000,800000)
+
+merch_vol_adj_factor <- 2.77 # based on a wild ass guess
+#merch_vol_adj_factor <- 2.38 #based on West Fraser Hinton
+odmt_adj_factor <-  0.10
+
+#get prop of dec/con by twp
+standing_time <- 60
+
+```
+### Utilization standards
 
 Many forest products companies operate in Alberta, and have different agreements
 with the government with respect to how the forest is managed.  Some companies
@@ -254,12 +421,78 @@ diameter will have an effect on the volume of residue left in the forest
 corresponding to the tops of trees.
 
 
-```{r FMU, echo=FALSE, fig.cap="Location of Forest Management Units in Alberta showing Green and White Areas.", out.width = '80%'}
-knitr::include_graphics("../img/FMU.png")
-```
+
+## Biomass collection costs
+
+All measures of biomass (Mg) used in this study are reported on
+a dry matter basis.
+
+We assume that the biomass available for collection at a cutblock includes the
+tops, branches, and foliage left at a roadside landing after processing by
+a stroke delimber.  The delimber is assumed to top the log at the top diameter
+specified in the utilization standard relevant to the harvest area.  Recovery
+will not be perfect.  We assume a recovery factor of 0.624 
+following Peltola *et al.* 
+@Peltola2011, recognizing that some of the residual biomass will 
+be unrecoverable.
+
+Our focus in this study is on the spatial and temporal variation in biomass
+collection costs based on residue availability associated with cycle times.  Following Röser @Roser2013, the pre-piling cost was set to
+`r sprintf("%5.2f",prepiling_cost)` \$·Mg^-1^ , the comminution cost
+was set to `r sprintf("%5.2f",comminution_cost)`  \$·Mg^-1^ , and other costs
+(roads, supervision, overhead, maintenance, and compliance) were
+set to  `r sprintf("%5.2f",other_cost)` \$·Mg^-1^ .  The total cost,
+excluding transport, is
+`r sprintf("%5.2f",constant_cost)` \$·Mg^-1^ .
+
+We assume that the residue will be transported from the forest using a 
+live floor chip van with 100 m³ capacity.
+The USDA Forest Service's Forest Residue Transportation Costing Model 
+@Rummer2005 assumes a default solid volume factor of 0.3 for biomass meaning that
+a 100 m³ capacity trailer could hold the equivalent of 30 m³ of solid biomass.
+
+This equates to `r sprintf("%5.2f",odt_trailer)` Mg
+of biomass assuming a specific gravity of `r sprintf("%5.2f",specific_gravity)` 
+which is the specific gravity of lodgepole pine wood and bark on a green volume basis 
+according to Miles and Smith @Miles2009a.
+
+Timber Tracks produces a publication describing forestry equipment hourly rates
+@TT2020.  The rate reported for an 8 axle tridem tractor with a
+b-train trailer was `r sprintf("%5.2f",hourly_truck_rate)` \$/h.  We assume that
+the tractor-trailer combination used to haul biomass would cost a 
+similar amount.
+
+Therefore, the cost of transporting residual biomass was set to 
+`r sprintf("%5.2f",truck_rate)` \$·Mg^-1^·h^-1^.
+
+
+<!-- ## Hypothetical plant locations and capacities -->
+<!-- Location stuff based on Onyango @Onyango2019. -->
+
+<!-- There are a number of companies with Forest Management Agreement Areas -->
+<!-- located near Edson, Whitecourt, and Hinton. -->
+<!-- The West Fraser Mills Ltd. (Hinton) FMAA is the primary timbershed for the -->
+<!-- Hinton Wood Products sawmill and the Hinton Pulp pulp mill.  The West Fraser Mills Ltd. (Hinton) FMA is the primary timbershed for the Edson Forest Products  -->
+<!-- sawmill.  The Weyerhaeuser Company Limited (Pembina Timberlands) FMAA supplies  -->
+<!-- the Edson oriented strand board mill and the Drayton Valley sawmill.  The  -->
+<!-- Weyerhaeuser Company Limited (Pembina Timberlands) FMAA supplies sawmills in Whitecourt and Fox Creek, a pulp mill -->
+<!-- in Whitecourt, and a specialty wood products facility and Acheson.  The Blue -->
+<!-- Ridge Lumber Inc. FMAA supplies a sawmill in Blue Ridge, which is about 23 km  -->
+<!-- from Whitecourt.  The ANC Timber Ltd. FMAA supplies logs to several sawmills in -->
+<!-- the area, in exchange for chips used to feed the Alberta Newsprint -->
+<!-- Company newsprint mill in Whitecourt. -->
+
+<!-- ```{r west_central_ab, echo=FALSE, fig.cap="Location of Forest Management Agreement Areas serving Hinton, Edson, and Whitecourt.", out.width = '80%'} -->
+<!-- knitr::include_graphics("../img/west_central_AB_2.png") -->
+<!-- ``` -->
+
+
 
 ### Terrestrial ecozone map
 
+Most
+of the timber harvest in Alberta occurs in the Boreal Plain, but some occurs
+in the Montane Cordillera and Taiga Plain.
 
 
 The NFIS' individual tree biomass calculator @NFIS2016 uses province, ecozone, 
@@ -268,18 +501,10 @@ equations developed by Lambert
 *et al.* (2005) @Lambert2005.
 
 ```{r ecozones, echo=FALSE, fig.cap="Terrestrial ecozones of Canada within Alberta.", out.width = '80%'}
-knitr::include_graphics("../img/ecozones.png")
-```
-Example output from the biomass calculator.
-
-```{r biomass_calculator_example, echo=FALSE, fig.cap="Biomass calculator example.", out.width = '80%'}
-knitr::include_graphics("../img/biomass_calc_example.png")
+knitr::include_graphics("../img/ecozonesAlex.png")
 ```
 
 
-```{r taper, echo=FALSE, fig.cap="Volume calcualation example.", out.width = '80%'}
-knitr::include_graphics("../img/taper.png")
-```
 ## Spatial variability in residual biomass production
 
 There is considerable spatial variability in the amount of timber harvest
@@ -328,47 +553,6 @@ subalpine fir (*Abies lasiocarpa* (Hooker) Nuttall),
 and Rocky Mountain Douglas-fir 
 (*Pseudotsuga menziesii* var. *glauca*  (Mayr) Franco).
 
-## Service areas
-
-
-The provincial road network was sorted into four classes: primary highways,
-other paved roads, two-lane gravel roads, and one-lane gravel or dirt roads.  
-Loaded and unloaded travel speeds were assumed for each road class, according
-to the table below. The harmonic mean of loaded and unloaded speeds 
-(rounded to the nearest
-multiple of 5 km/h) were calculated as
-
-$s_h= \left(\frac{s_l^{-1} + s_u^{-1}}{2}\right)^{-1}$.
-
-Use of harmonic mean allows us to calculate the correct round trip travel time.
-
-
-| Road class      | loaded | unloaded | harmonic mean | 
-|:----------------|-------:|---------:|--------------:|
-| primary highways|    80  |       95 |           85  |
-| other paved     |    65  |       80 |           70  |
-| 2-lane gravel   |    50  |       70 |           60  | 
-| 1-lane gravel or dirt  |    20  |       30 |           25  | 
-| no road           |     2  |       2  |           2   |
-
-
-Check out https://haozhu233.github.io/kableExtra/awesome_table_in_html.html to
-try to format this table better.
-
-
-* Rasterized network areas were generated using the QGIS plugin, QNEAT3
-(Iso-Area as Interpolation) @Raffler2018. **How big are the cells?**
-
-
-* QGIS zonal statistics were used to calculate the median network travel time in
-each township.
-
-  
-```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time from Edson, limited to 6 hours.", out.width = '100%'}
-knitr::include_graphics("../img/network_service.png")
-```
-  
-
 
 # Theory/Calculation
 
@@ -387,7 +571,7 @@ The GIS analysis for this paper was done using QGIS @QGISorg2021.  Data
 summaries and statistical analysis were done using R @R2021 with RStudio
 @RStudioTeam2021, and tidyverse @Wickham2019.
 
-## Residue yield (Mg · ha^-1^ (DM)) by township.
+## Residue yield (Mg · ha^-1^ ) by township.
 
 ### Merchantable volume township 
 
@@ -439,31 +623,36 @@ most jurisdictions.  It is straightforward to determine cross-sectional area
 of the tree at any height.  Integrating this area function will yield volume
 between any two heights.
 
-\[
+\begin{equation}
 d(d_b,h) = \left(d^2_{b} \frac{\beta_0 d_{b}^{\beta_1}}{\beta_0 d_{b}^{\beta_1} - 1.3} \left(\frac{h}{1.3}\right)^{2-\beta_2}\right)^{-2}
-\]
+\end{equation}
 
 where $d$ is the diameter (cm) at height $h$ (m), and $d_b$ is the diameter at
 breast height (1.3 m above ground level)
 
 Implicit in this equation is an equation for tree height
 
-\[
+\begin{equation}
 H(d_b) = \beta_0 d_b ^ {\beta_1}
-\]
+\end{equation}
 
 The cross-sectional area equation
 
-\[
-a(d_b,h) = \pi \left(\frac{d(d_b,h)}{200}\right)^2
-\]
+\begin{equation}
+r(d_b,h) = \frac{d(d_b,h)}{200}
+\end{equation}
 
-\[
-v(d_b,h_s,h_t) = \int_{h_s}^{h_t}\pi \left(\frac{d(d_b,h)}{200}\right)^2dh
-\]
+The constant 200 is used to convert a diameter (cm) to a radius (m). 
 
-The constant 200 is used to convert a diameter (cm) to a radius (m).  
-**find a way to reduce possible confusion with $d$**
+\begin{equation}
+a(d_b,h) = \pi r(d_b,h)^2
+\end{equation}
+
+\begin{equation}
+v(d_b,h_s,h_t) = \int_{h_s}^{h_t} \pi r(d_b,h)^2 dh
+\end{equation}
+
+ 
 
 There is also a simple linear model relating outside bark to inside bark diameter.  The
 taper function is for outside bark diameter, but piece sizes are reported
@@ -501,40 +690,6 @@ tops of the harvested trees and the branches and foliage.  The residual biomass
 from the tops is calculated using the total biomass of stem wood and stem bark
 adjusted by the volume proportions calculated above.
 
-### Township level biomass
-
-For both needleleaf and broadleaf, we multiply the residue associated with the
-individual tree by the number of harvested stems per ha.  We reduce this
-value using a recovery factor of 0.645 **??** following Peltola *et al.* 
-@Peltola2011, recognizing that some of the residual biomass will 
-be unrecoverable.
-
-```{r resdiue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'}
-knitr::include_graphics("../img/residue_per_ha.png")
-```
-
-## Cost calculations
-
-
-```{r roser, echo=FALSE, fig.cap="Röser.", out.width = '100%'}
-knitr::include_graphics("../img/roser.png")
-```
-
-  
-```{r hourly_rates, echo=FALSE, fig.cap="Hourly rates for forestry equipment.", out.width = '100%'}
-knitr::include_graphics("../img/hourly_rates.png")
-```
-  
-
-
-Following @Roser2013, the pre-piling cost was set to
-`r sprintf("%5.2f",prepiling_cost)` \$·Mg^-1^ (DM), the comminution (*grinding ?*) cost
-was set to `r sprintf("%5.2f",comminution_cost)`  \$·Mg^-1^ (DM), and other costs were
-set to  `r sprintf("%5.2f",other_cost)` \$·Mg^-1^ (DM).  The total "constant" costs are
-`r sprintf("%5.2f",constant_cost)` \$·Mg^-1^ (DM).
-Using *blah blah blah* , the truck rate was set to 
-`r sprintf("%5.2f",truck_rate)` \$·Mg^-1^ (DM)/h.
-A 100 m³ trailer can haul `r odt_trailer` Mg (DM) of chipped residue.
 
 ```{r read_data_files, echo=FALSE}
 newAB <- read.csv(file = '../data/AlbertaHarvestLevels.csv',
@@ -650,25 +805,30 @@ softwood and 264 647 m^3^ are not included in the harvest levels
 shown in the graph.
 
 ```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels compared with estimated.", out.width = '100%'}
-#knitr::include_graphics("../img/alberta_harvest.png")
-harv_comparison
+suppressWarnings(print(harv_comparison))
 ```
 
 
-```{r harvbyowner, echo=FALSE, fig.cap="NFDP harvest levels by ownership.", out.width = '100%'}
-knitr::include_graphics("../img/harvestbyowner.png")
+<!-- ```{r harvbyowner, echo=FALSE, fig.cap="NFDP harvest levels by ownership.", out.width = '100%'} -->
+<!-- knitr::include_graphics("../img/harvestbyowner.png") -->
+<!-- ``` -->
+
+
+# Results and Discussion
+
+
+## Township level biomass
+
+
+```{r resdiue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'}
+knitr::include_graphics("../img/residue_per_ha.png")
 ```
 
+## Distributional results
+```{r supply_curves, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Residue supply (cycle time) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
 
-Some lovely supply curves
-
-
-```{r supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (cycle time) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
-
-
-
-p <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 Mg (DM))") +
+cyclePlot <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
+  labs(x = "cumulative residue (1000 Mg )") +
   labs(y = "cycle time (hr)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -680,19 +840,16 @@ p <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as
   theme(legend.position = "none") +
   facet_grid(cols=vars(location)) +
   scale_x_continuous(limits=c(0,800000),labels = label_number(scale = 1/1000))+
-  scale_y_continuous(limits=c(0,12)) 
-
-p 
-
+  scale_y_continuous(limits=c(0,14)) 
 
 
 ```
 
 
-```{r more_supply_curves, echo=FALSE, warning=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
-ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (1000 Mg (DM))") +
-  labs(y = "marginal cost ($·Mg^-1^ (DM))") +
+```{r more_supply_curves, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Residue supply (delivered cost) curves by location.  Each curve represents one year.  The red curve is for 2009, which was the year of median harvest volume."}
+mcPlot <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
+  labs(x = "cumulative residue (1000 Mg )") +
+  labs(y = "marginal cost ($·Mg^-1^ )") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -703,10 +860,12 @@ ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.fa
   theme(legend.position = "none") +
   facet_grid(cols=vars(location)) +
   scale_x_continuous(limits=c(0,800000),labels = label_number(scale = 1/1000)) +
-  scale_y_continuous(limits=c(50,175)) 
+  scale_y_continuous(limits=c(50,250)) 
 ```
 
-```{r boxplots, echo=FALSE, warning=FALSE, fig.cap="Distribution of residue costs by location, capacity, and year"}
+
+
+```{r boxplots, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Distribution of residue costs by location, capacity, and year"}
 t200 <- cum.odmt %>% filter(residue.cumsum <= 200000)
 t200$capacity <- 200
 t400 <- cum.odmt %>% filter(residue.cumsum <= 400000)
@@ -720,17 +879,17 @@ t <- bind_rows(t,t800)
 t <- t %>%
   arrange(year,location, cycleTime) 
 
-p <- ggplot(t,aes(factor(year),residueCost))  + 
+bPlot <- ggplot(t,aes(factor(year),residueCost))  + 
   geom_tufteboxplot() +  
   facet_grid(cols=vars(location),rows=vars(capacity)) +
-  labs(y = "residue cost ($·Mg^-1^ (DM))", x="year") +
+  labs(y = "residue cost ($·Mg^-1^ )", x="year") +
   scale_x_discrete(breaks=c("1990","","","","","1995","","","","","2000","","","","","2005","","","","","2010","","","","","2015")) +
   theme(axis.text.x = element_text(angle=90))
-p
 
 ```
 
-```{r avecosts, echo=FALSE, warning=FALSE, fig.cap="Average costs by location, capacity, and year "}
+
+```{r avecosts, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Average costs by location, capacity, and year "}
 
 t <- t %>%
   arrange(location, capacity, year)
@@ -740,21 +899,36 @@ avet <-t %>%
   summarize(avecost = mean(residueCost))
 
 
-ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
+avePlot <- ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
   labs(x = "year") +
-  labs(y = "average cost ($·Mg^-1^ (DM))") +
+  labs(y = "average cost ($·Mg^-1^ )") +
   geom_line() +
   facet_grid(rows=vars(capacity)) +
-  scale_y_continuous(limits=c(60,150)) 
+  scale_y_continuous(limits=c(60,200)) 
 
 ```
 
+```{r cyclePlot, echo=FALSE, fig.cap="Distribution of cycle times by location.", out.width = '100%'}
+suppressWarnings(print(cyclePlot))
+```
 
-# Results and discussion
+
+```{r mcpPlot, echo=FALSE, fig.cap="Distribution of marginal costs by location.", out.width = '100%'}
+suppressWarnings(print(mcPlot))
+```
+
+```{r bPlot, echo=FALSE, fig.cap="Boxplots of costs by location.", out.width = '100%'}
+suppressWarnings(print(bPlot))
+```
+
+```{r avePlot, echo=FALSE, fig.cap="Average costs by location and year.", out.width = '100%'}
+suppressWarnings(print(avePlot))
+```
+
 
 Whitecourt is low cost for most years at all capacities.  Noticable spike in
 1999.  Probably due to Virginia Hills fire salvage.  Note that this spike
-also affects Hinton and Edson at 800 000 Mg/a (DM) capacity, 
+also affects Hinton and Edson at 800 000 Mg/a  capacity, 
 because they reach into the 
 Whitecourt area.
 
@@ -769,11 +943,14 @@ so far out.
 
 This research was supported by funding from the Canada First Research Excellence
 Fund as part of the University of Alberta’s Future Energy Systems 
-research initiative
+research initiative.
 <!-- (Project # CFREF-2015-00001) -->
-.
+
 
 Dennis Gray contributed to data compilation.
+
+This work started as an extension to Irene Onyango's Master of Agriculture
+research.
 
 We work with a group of talented people.  Thanks to Marty Luckert, Feng Qiu,
 Grant Hauer, and Wenbei Zhang for helpful discussion.
