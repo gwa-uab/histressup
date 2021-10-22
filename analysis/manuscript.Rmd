@@ -23,15 +23,15 @@ header-includes:
   - \usepackage[left]{lineno}
   - \linenumbers
 output:
-  word_document:
-     number_sections: yes
-     pandoc_args:
-      - '--lua-filter=scholarly-metadata.lua'
-      - '--lua-filter=author-info-blocks.lua'
   html_document:
     number_sections: yes
     df_print: paged
     pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  word_document:
+     number_sections: yes
+     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
   pdf_document:
@@ -69,6 +69,10 @@ library(scales)
 library(DescTools)
 library(zoo)
 library(ezknitr)
+library(magick)
+library(kableExtra)
+library(gt)
+library(glue)
 #ezknit(file="analysis/manuscript.Rmd", out_dir="output", fig_dir="myfigs")
 ```
 
@@ -76,6 +80,14 @@ library(ezknitr)
 
 1. **Focus on cost variability associated with transportation and forest  characteristics**
 2. **Based on historical harvest locations (1990-2015)**
+
+Need to reference Yemshanov @Yemshanov2014 and Blackburn @Blackburn2020.  Our
+strengths
+
+1. Availability of data
+2. Temporal variability
+3. suitability for mid-level analysis
+4. ultra-cool graphics
 
 
 <!-- ## Some obvious citations -->
@@ -157,6 +169,8 @@ Alberta's western boundary, and immediately east of the 5^th^ and 6^th^
 meridians (corresponding to 114°W and 118°W longitude, respectively) are 
 partial townships and therefore deviate from the roughly square shape.  ATS
 is described in detail by the Alberta Land Surveyor's Association @ALSA2021.
+There are 7 237 townships in Alberta.  That allow for pretty good spatial 
+resolution.
 
 
 
@@ -223,8 +237,8 @@ web site @Canada2017.
 ## Study area
 
 Alberta is a province in western Canada.  It occupies 661 848 km^2^.
-Its southern border is 49°N latitude, northern border is 60°N latitude,
-eastern border is 110°W longitude, and its western boundary is defined by
+Its southern boundary is 49°N latitude, northern boundary is 60°N latitude,
+eastern boundary is 110°W longitude, and its western boundary is defined by
 120°W longitude and the Great Divide of the Rocky Mountains.
 
 ```{r canada, echo=FALSE, fig.cap="Location of Alberta in Canada.", out.width = '80%'}
@@ -378,6 +392,7 @@ knitr::include_graphics("../img/network_service.png")
 #hourly_truck_rate <- 175 # adjusted from Roger's numbers to be more in line with Roeser
 trailer_capacity <- 100 #m^3 from https://www.newtontrailers.com/trailer_hire/biomass_moving_floor_trailer/-/54/0
 hourly_truck_rate <- 175.90 #$/hr
+#hourly_truck_rate <- 108.82 #$/hr
 #solid_volume_factor <- 0.4 #from fortsv5
 solid_volume_factor <- 0.3 #from fortsv5
 adj_trailer_capacity <- trailer_capacity * solid_volume_factor
@@ -413,7 +428,7 @@ Utilization standards in Alberta are specified on the basis of stump height,
 minimum stump diameter (outside bark), and minimum log length to a specified top
 diameter (inside bark).  Utilization standards vary by FMU.  Stump heights used
 in Alberta are 15 and 30 cm; stump diameters are 13 or 15 cm; top diameters are
-7, 10, 11, or 12 cm; and minimum log lengths are 2.44, 2.66, 2.67, 3.55, 3.76, 
+7, 10, 11, or 12 cm; and minimum log lengths are 2.44, 2.66, 2.67, 3.66, 3.76, 
 or 4.88 m.  These utilization standards are necessary to relate volumes 
 calculated to the 13/7 standard for the National Forest Inventory to the harvest
 volumes reported by the companies.  Perhaps most importantly, the minimum top
@@ -572,6 +587,7 @@ summaries and statistical analysis were done using R @R2021 with RStudio
 @RStudioTeam2021, and tidyverse @Wickham2019.
 
 ## Residue yield (Mg · ha^-1^ ) by township.
+
 
 ### Merchantable volume township 
 
@@ -762,12 +778,8 @@ harv_comparison <- ggplot(data=harv5, aes(x=year,y=harvest_vol, colour="Estimate
   labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
   geom_line()  +
   geom_line(aes(y=total, colour="Actual harvest"))  +
-  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6))
-# +
-#   scale_colour_viridis(discrete = TRUE) +
-#   theme(legend.position = "none") +
-#   facet_grid(cols=vars(location)) +
-#   scale_x_continuous(limits=c(0,800000),labels = label_number(scale = 1/1000))
+  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) +
+  scale_x_continuous(limits=c(1990,2015))
 # 
 # head(harv4)
 
@@ -794,6 +806,34 @@ cum.odmt <- big_joined %>%
   group_by(location,year) %>%
   mutate(residue.cumsum=cumsum(residue_odmt))
 
+cum.whitecourt2009 <- cum.odmt %>% 
+  filter(location == "Whitecourt") %>% 
+  filter(year == 2009) %>% 
+  filter(residue.cumsum <= 800000) 
+
+write.csv(file="../data/cum.whitecourt2009.csv",cum.whitecourt2009)
+
+cum.whitecourt1990 <- cum.odmt %>% 
+  filter(location == "Whitecourt") %>% 
+  filter(year == 1990) %>% 
+  filter(residue.cumsum <= 800000) 
+
+write.csv(file="../data/cum.whitecourt1990.csv",cum.whitecourt1990)
+
+cum.whitecourt2005 <- cum.odmt %>% 
+  filter(location == "Whitecourt") %>% 
+  filter(year == 2005) %>% 
+  filter(residue.cumsum <= 800000) 
+
+write.csv(file="../data/cum.whitecourt2005.csv",cum.whitecourt2005)
+
+
+cum.hew <- cum.odmt %>% 
+  select(TRM, location, cycleTime, year, residue.cumsum) %>% 
+  filter(year == 2005 | year == 1990 | year == 2009) %>% 
+  filter(residue.cumsum <= 800000) 
+
+write.csv(file="../data/cum_3yrs_3towns.csv",cum.hew,row.names = FALSE)
 
 ```
 
@@ -829,7 +869,7 @@ knitr::include_graphics("../img/residue_per_ha.png")
 
 cyclePlot <- ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
   labs(x = "cumulative residue (1000 Mg )") +
-  labs(y = "cycle time (hr)") +
+  labs(y = "marginal cycle time (hr)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -906,7 +946,24 @@ avePlot <- ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
   facet_grid(rows=vars(capacity)) +
   scale_y_continuous(limits=c(60,200)) 
 
+aveave <- avet %>%
+  group_by(location,capacity) %>% 
+  summarise(aveavecost = mean(avecost),
+            sdavecost = sd(avecost))
+
+aveave <- aveave %>% 
+  mutate(cv = sdavecost/aveavecost)
+
+aveave
+
 ```
+
+Figure ?? displays the marginal cycle time for each of the locations over the
+16 years of the study period.  The year 2009 had the median overall harvest 
+level in Alberta over that period, and is coloured red in order to illustrate
+the marginal cycle time for a median year.
+
+
 
 ```{r cyclePlot, echo=FALSE, fig.cap="Distribution of cycle times by location.", out.width = '100%'}
 suppressWarnings(print(cyclePlot))
@@ -935,6 +992,15 @@ Whitecourt area.
 As expected, residue costs are lower with lower capacities because they don't have to reach
 so far out.
 
+
+```{r w2009, echo=FALSE, fig.cap="Relationship between timber harvest intensity and required supply area for facilities with demands of 200, 400, and 800 Tg.  The area of the dots reflects the proportion of the area of each township harvest in 2009", out.width = '100%'}
+knitr::include_graphics("../img/w2009.png")
+```
+
+
+```{r wcontour, echo=FALSE, fig.cap="Supply area for facilities in Whitecourt with demands of 200, 400, and 800 Tg for low cost (2005), medium cost (2009), and high cost (1990) years.", out.width = '100%'}
+knitr::include_graphics("../img/wcontours.png")
+```
 # Conclusions
 
 # Data availability
