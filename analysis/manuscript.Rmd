@@ -1,6 +1,6 @@
 ---
 title: Spatial and temporal variability in economic availability of residual biomass
-  from timber harvest in west-central Alberta, Canada (1990-2015)
+  from timber harvest in west-central Alberta, Canada (1990--2015)
 author:
 - Glen W. Armstrong:
     institute: rr
@@ -12,8 +12,24 @@ author:
 - Alex W. McPhee:
     email: awmcphee@ualberta.ca
     institute: rees
+institute:
+- rr: Department of Renewable Resources, University of Alberta, Edmonton AB  T6G 2H1,
+    Canada
+- rees: Department of Resource Economics and Environmental Sociology, University of
+    Alberta, Edmonton AB  T6G 2H1, Canada
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
+  html_document:
+    number_sections: yes
+    df_print: paged
+    pandoc_args:
+    - --lua-filter=scholarly-metadata.lua
+    - --lua-filter=author-info-blocks.lua
+  word_document:
+    number_sections: yes
+    pandoc_args:
+    - --lua-filter=scholarly-metadata.lua
+    - --lua-filter=author-info-blocks.lua
   pdf_document:
     includes:
       in_header: preamble.tex
@@ -23,28 +39,15 @@ output:
     pandoc_args:
     - --lua-filter=scholarly-metadata.lua
     - --lua-filter=author-info-blocks.lua
-  word_document:
-    number_sections: yes
-    pandoc_args:
-    - --lua-filter=scholarly-metadata.lua
-    - --lua-filter=author-info-blocks.lua
-  html_document:
-    number_sections: yes
-    df_print: paged
-    pandoc_args:
-    - --lua-filter=scholarly-metadata.lua
-    - --lua-filter=author-info-blocks.lua
 header-includes:
 - \usepackage[left]{lineno}
+- \usepackage{setspace}
 - \linenumbers
-institute:
-- rr: Department of Renewable Resources, University of Alberta, Edmonton AB  T6G 2H1,
-    Canada
-- rees: Department of Resource Economics and Environmental Sociology, University of
-    Alberta, Edmonton AB  T6G 2H1, Canada
+geometry: left=1.5in,right=0.5in,top=1in,bottom=1in
 csl: biomass-and-bioenergy
 bibliography: historicalResidueSupply.bib
 ---
+
 \raggedright
 <!-- \fontfamily{cmr} -->
 <!-- \fontsize{12}{22} -->
@@ -56,7 +59,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries, echo=FALSE, message=FALSE}
-setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp")
+setwd("g:/Shared drives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 #setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
 library(ggthemes)
@@ -71,15 +74,18 @@ library(magick)
 library(kableExtra)
 library(gt)
 library(glue)
-#ezknit(file="analysis/manuscript.Rmd", out_dir="output", fig_dir="myfigs")
 ```
+
+
+\newpage
+\doublespacing
 
 # Introduction
 
 1. **Focus on cost variability associated with transportation and forest  characteristics**
 2. **Based on historical harvest locations (1990-2015)**
 
-Need to reference Yemshanov @Yemshanov2014 and Blackburn @Blackburn2020.  Our
+Need to reference Yemshanov @Yemshanov2014 and Blackburn @Blackburn2020a.  Our
 strengths
 
 1. Availability of data
@@ -136,7 +142,7 @@ strengths
 ## Data sources
 
 We used a number of publicly available datasets to develop the datasets
-used in our analysis.  Most of the data are freely available from the World
+used in our analysis.  Most of the data are freely available on the World
 Wide Web (WWW). Much of the data processing required for this study was 
 manipulation of spatial
 data.  This was done using the QGIS software @QGISorg2021.
@@ -285,9 +291,9 @@ pulp mill in Hinton as the locations for the hypothetical forest residue
 processing facilities.
 
 As well as considering locations for the hypothetical plants, we considered 3
-different plant capacities: 200 Tg/a  corresponding to a small wood pellet
-mill, 400 Tg/a  corresponding to a large pellet mill or a small ethanol
-plant, and 800 Tg/a  corresponding to a large ethanol plant.
+different plant capacities: 200 Gg/a  corresponding to a small wood pellet
+mill, 400 Gg/a  corresponding to a large pellet mill or a small ethanol
+plant, and 800 Gg/a  corresponding to a large ethanol plant.
 
 
 
@@ -317,9 +323,9 @@ Loaded and unloaded travel speeds were assumed for each road class, according
 to the table below. The harmonic mean of loaded and unloaded speeds 
 (rounded to the nearest
 multiple of 5 km/h) were calculated as
-\begin{equation}
+$$
 \bar{s_h}= \left(\frac{s_l^{-1} + s_u^{-1}}{2}\right)^{-1}
-\end{equation}
+$$
 where $s_l$ is the loaded speed and $s_u$ is the unloaded speed.
 Use of harmonic mean allows us to calculate the correct  cycle time:  the
 time required to travel from the mill, to the collection site in the forest,
@@ -367,7 +373,8 @@ does not count as driving time.  There is an on-duty limit of 14 hours**.
 
 #hourly_truck_rate <- 175 # adjusted from Roger's numbers to be more in line with Roeser
 trailer_capacity <- 100 #m^3 from https://www.newtontrailers.com/trailer_hire/biomass_moving_floor_trailer/-/54/0
-hourly_truck_rate <- 175.90 #$/hr
+#hourly_truck_rate <- 175.90 #$/hr
+hourly_truck_rate <- 157.31 #$/hr tandem tractor with tandem trailer
 #hourly_truck_rate <- 108.82 #$/hr
 #solid_volume_factor <- 0.4 #from fortsv5
 solid_volume_factor <- 0.3 #from fortsv5
@@ -378,7 +385,8 @@ truck_rate <- hourly_truck_rate / odt_trailer
 
 #truck_rate <- 6.43 # $/odt/hr
 prepiling_cost <- 6.30 # $/odt
-comminution_cost <- 25.60 # $/odt
+#comminution_cost <- 25.60 # $/odt
+comminution_cost <- 26.82 # $/odt (Blackburn2020a)
 other_cost <- 8.48 # $/odt
 constant_cost <- prepiling_cost +  comminution_cost + other_cost # $·Mg^-1^ 
 location <- c('Whitecourt','Edson','Hinton')
@@ -429,7 +437,7 @@ be unrecoverable.
 
 Our focus in this study is on the spatial and temporal variation in biomass
 collection costs based on residue availability associated with cycle times.  Following Röser @Roser2013, the pre-piling cost was set to
-`r sprintf("%5.2f",prepiling_cost)` \$·Mg^-1^ , the comminution cost
+`r sprintf("%5.2f",prepiling_cost)` \$·Mg^-1^ , the comminution cost (@Blackburn2020a)
 was set to `r sprintf("%5.2f",comminution_cost)`  \$·Mg^-1^ , and other costs
 (roads, supervision, overhead, maintenance, and compliance) were
 set to  `r sprintf("%5.2f",other_cost)` \$·Mg^-1^ .  The total cost,
@@ -448,8 +456,10 @@ which is the specific gravity of lodgepole pine wood and bark on a green volume 
 according to Miles and Smith @Miles2009a.
 
 Timber Tracks produces a publication describing forestry equipment hourly rates
-@TT2020.  The rate reported for an 8 axle tridem tractor with a
-b-train trailer was `r sprintf("%5.2f",hourly_truck_rate)` \$/h.  We assume that
+@TT2020.  The rate reported for 
+#an 8 axle tridem tractor with a b-train trailer was
+tandem tractor with a tandem trailer was
+`r sprintf("%5.2f",hourly_truck_rate)` \$/h.  We assume that
 the tractor-trailer combination used to haul biomass would cost a 
 similar amount.
 
@@ -557,7 +567,7 @@ The GIS analysis for this paper was done using QGIS @QGISorg2021.  Data
 summaries and statistical analysis were done using R @R2021 with RStudio
 @RStudioTeam2021, and tidyverse @Wickham2019.
 
-## Residue yield (Mg · ha^-1^ ) by township.
+## Residue yield (Mg·ha^-1^ ) by township.
 
 
 ### Merchantable volume township 
@@ -610,34 +620,36 @@ most jurisdictions.  It is straightforward to determine cross-sectional area
 of the tree at any height.  Integrating this area function will yield volume
 between any two heights.
 
-\begin{equation}
+$$
 d(d_b,h) = \left(d^2_{b} \frac{\beta_0 d_{b}^{\beta_1}}{\beta_0 d_{b}^{\beta_1} - 1.3} \left(\frac{h}{1.3}\right)^{2-\beta_2}\right)^{-2}
-\end{equation}
+$$
 
 where $d$ is the diameter (cm) at height $h$ (m), and $d_b$ is the diameter at
 breast height (1.3 m above ground level)
 
 Implicit in this equation is an equation for tree height
 
-\begin{equation}
+
+$$
 H(d_b) = \beta_0 d_b ^ {\beta_1}
-\end{equation}
+$$
+
 
 The cross-sectional area equation
 
-\begin{equation}
+$$
 r(d_b,h) = \frac{d(d_b,h)}{200}
-\end{equation}
+$$
 
 The constant 200 is used to convert a diameter (cm) to a radius (m). 
 
-\begin{equation}
+$$
 a(d_b,h) = \pi r(d_b,h)^2
-\end{equation}
+$$
 
-\begin{equation}
+$$
 v(d_b,h_s,h_t) = \int_{h_s}^{h_t} \pi r(d_b,h)^2 dh
-\end{equation}
+$$
 
  
 
@@ -661,6 +673,22 @@ proportion later to calculate biomass of stemwood and bark in the top.
 
 The number of harvested stems per ha is calculated by dividing the 13/7 volume
 per ha by the 13/7 piece size.
+
+## The average tree!
+
+FMA holders are now required by Alberta to project average piece size in the 
+detailed forest management plans for their FMAAs.  We use these piece sizes
+projected for the first period of the DMFP.  They range from 0.110 to 0.599 m^3^
+per tree.
+The mean piece size for needleaf species is 0.278 m^3^ and 0.264 m^3^ for broadleaf
+species.
+For needleaf and broadleaf species to calculate the average dbh and height
+for the most common species in each township for the group using the
+taper functions from Ung *et al.* @Ung2013, by searching for the dbh
+that yields these piece sizes for the FMAA utilization standards using
+binary search.  For FMUs not associated
+with an FMAA, or for FMAAs with plans written before this requirement we
+use the average piece size from the DFMPs.
 
 ### Individual tree biomass.
 
@@ -744,17 +772,37 @@ harv3 <- read.csv(file = '../data/ABHarvestVol.csv') %>% filter(year >=1990)
 harv4 <- merge(harv2, harv3, by = "year", all=TRUE)
 harv5 <- merge(harv4, newAB, by = "year", all=TRUE)
 
-harv_comparison <- ggplot(data=harv5, aes(x=year,y=harvest_vol, colour="Estimated harvest")) +
-  labs(x = "year") +
-  labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
-  geom_line()  +
-  geom_line(aes(y=total, colour="Actual harvest"))  +
-  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) +
-  scale_x_continuous(limits=c(1990,2015))
+# harv_comparison <- ggplot(data=harv5, aes(x=year,y=harvest_vol)) +
+#   labs(x = "year") +
+#   labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
+#   geom_line()  +
+#   geom_line(aes(y=total))  +
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) +
+#   scale_x_continuous(limits=c(1990,2015)) + 
+#   guides(fill=guide_legend(title="harvest volume"))
+
+# harv_comparison <- ggplot(data=harv5, aes(x=year)) +
+#   labs(x = "year") +
+#   labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
+#   geom_line(aes(y=harvest_vol))  +
+#   geom_line(aes(y=total))  +
+#   scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) +
+#   scale_x_continuous(limits=c(1990,2015)) + 
+#   guides(fill=guide_legend(title="harvest volume"))
 # 
 # head(harv4)
 
+harv5a <- harv5 %>% 
+  select(year,harvest_vol,total) %>% 
+  rename(actual = total, estimated = harvest_vol) %>% 
+  pivot_longer(!year,names_to = "Volume", values_to = "sum")
 
+harv_comparison <- ggplot(data=harv5a, aes(x = year,y = sum,colour = Volume)) + 
+  labs(y = bquote('harvest volume' ~(10^6 ~m^3))) +
+  geom_line(aes(y =  sum)) +
+  scale_y_continuous(limits=c(0,30e6),labels = label_number(scale = 1/1e6)) +
+  scale_x_continuous(limits=c(1990,2015)) +
+  theme(legend.position = c(0.9,0.3))
 
 t <- read.csv(file = '../data/interpolated_median_oneway_times_seconds.csv')
 
@@ -776,6 +824,8 @@ cum.odmt <- big_joined %>%
   arrange(location,year,cycleTime) %>%
   group_by(location,year) %>%
   mutate(residue.cumsum=cumsum(residue_odmt))
+
+#save(cum.odmt,file="../data/cum.odmt.RData")
 
 cum.whitecourt2009 <- cum.odmt %>% 
   filter(location == "Whitecourt") %>% 
@@ -831,8 +881,8 @@ shown in the graph.
 
 cyclePlot <- 
   ggplot(data=cum.odmt, aes(x=residue.cumsum,y=cycleTime,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (Tg )") +
-  labs(y = "marginal cycle time (hr)") +
+  labs(x = "cumulative residue (Gg )") +
+  labs(y = "marginal cycle time (h)") +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -854,8 +904,8 @@ cyclePlot <-
 ```{r more_supply_curves, echo=FALSE, warning=FALSE, message=FALSE,  fig.cap="Residue supply (marginal cost) curves by plant location.  Each curve represents one year.  The red curves (from top to bottom) are for 1990, 2009, and 2005 which are the years of minimum, median, and maximum harvest volume in Alberta."}
 mcPlot <- 
   ggplot(data=cum.odmt, aes(x=residue.cumsum,y=residueCost,group=year,colour=as.factor(year))) +
-  labs(x = "cumulative residue (Tg )") +
-  labs(y = "marginal cost ($·Mg^-1^ )") +
+  labs(x = "cumulative residue (Gg )") +
+  labs(y = bquote('marginal cost ('~"$"%.%Mg^-1~')')) +
   geom_line() +
   scale_colour_manual(values=c("Grey","Grey","Grey","Grey","Grey","Grey","Grey",
                                "Grey","Grey","Grey","Grey","Grey","Grey","Grey",
@@ -890,7 +940,8 @@ t <- t %>%
 bPlot <- ggplot(t,aes(factor(year),residueCost))  + 
   geom_tufteboxplot() +  
   facet_grid(cols=vars(location),rows=vars(capacity)) +
-  labs(y = "residue cost ($·Mg^-1^ )", x="year") +
+  labs(y = bquote('cost ('~"$"%.%Mg^-1~')'))+
+  labs(x = "year") + 
   scale_x_discrete(breaks=c("1990","","","","","1995","","","","","2000","","","","","2005","","","","","2010","","","","","2015")) +
   theme(axis.text.x = element_text(angle=90))
 
@@ -909,7 +960,7 @@ avet <-t %>%
 
 avePlot <- ggplot(data=avet, aes(x=year,y=avecost,colour=location))+
   labs(x = "year") +
-  labs(y = "average cost ($·Mg^-1^ )") +
+  labs(y = bquote('average cost ('~"$"%.%Mg^-1~')')) +
   geom_line() +
   facet_grid(rows=vars(capacity)) +
   scale_y_continuous(limits=c(60,200)) 
@@ -933,14 +984,15 @@ ave <- aveave %>%
     n_sigfig = 3
   ) %>% 
   cols_label(location = "Location",
-             capacity = "Capacity (Tg/a)",
-             aveavecost = "Mean ($·Mg^-1^)", 
-             sdavecost = "Std. Dev. ($·Mg^-1^)", 
-             cv = "C.V.")
+             capacity = "Capacity (Gg/a)",
+             aveavecost = "Mean ($/Mg", 
+             sdavecost = "Std. Dev. ($/Mg)", 
+             cv = "C.V.") 
+
 ```
 
 Figures 9 and 10 display marginal cycle time (h) and marginal costs ($·Mg^-1^)
-for each of the 16 years in the study period, and for the 3 alternative plant 
+for each of the 26 years in the study period, and for the 3 alternative plant 
 locations.  Curves for 1990, 2009, and 2005 are highlighted represented the
 years of minimum, median, and maximum provincial harvest volume in the period. 
 The inter-year variation in marginal costs increases as the cumulative amount
@@ -958,15 +1010,15 @@ increases.
 Figure 12 shows the average cost ($·Mg^-1^) for  each location, capacity, and
 year.  Overall, the average costs in Edson and Whitecourt are quite similar.
 Hinton is usually more expensive across years and capacities.  The differences
-become clearer at a capacity of 800 Tg, where Whitecourt is the low cost location
+become clearer at a capacity of 800 Gg, where Whitecourt is the low cost location
 for most of the years.
 
 
-Table ?? presents summary statistics over the 16 year for the locations and 
+Table ?? presents summary statistics over the 26 year for the locations and 
 capacities.  It is clear that average costs and the inter-annual variability of 
 costs increase with increasing capacity.  It is clear that the variation is costs
 for Hinton is greater than for Whitecourt and Edson, particularly for the 800
-Tg/a capacities.
+Gg/a capacities.
 
 
 
@@ -979,8 +1031,8 @@ green area.
 
 Figure 14 compares the supply areas for 2005, 2009, and 1990 (high, median, and
 low harvest years).  The area required to supply the mills increases by a lot
-in low timber harvest years, particularly for the 800 Tg/a capacity.  Similar
-maps could be produced for the other locations and all 16 years, but that is
+in low timber harvest years, particularly for the 800 Gg/a capacity.  Similar
+maps could be produced for the other locations and all 26 years, but that is
 unecessary here.
 
 
@@ -995,7 +1047,7 @@ unecessary here.
 
 
 <!-- Figure ?? displays the marginal cycle time for each of the locations over the -->
-<!-- 16 years of the study period.  The year 2009 had the median overall harvest  -->
+<!-- 26 years of the study period.  The year 2009 had the median overall harvest  -->
 <!-- level in Alberta over that period, and is coloured red in order to illustrate -->
 <!-- the marginal cycle time for a median year. -->
 
@@ -1003,7 +1055,7 @@ unecessary here.
 
 Whitecourt is low cost for most years at all capacities.  Noticable spike in
 1999.  Probably due to Virginia Hills fire salvage.  Note that this spike
-also affects Hinton and Edson at 800 000 Mg/a  capacity, 
+also affects Hinton and Edson at 800 Gg/a  capacity, 
 because they reach into the 
 Whitecourt area.
 
@@ -1049,7 +1101,7 @@ Grant Hauer, and Wenbei Zhang for helpful discussion.
 
 \newpage
 
-# Reference list
+# Reference list  {-}
 
 <div id="refs"></div>
 
@@ -1057,14 +1109,24 @@ Grant Hauer, and Wenbei Zhang for helpful discussion.
 
 # Tables {-}
 
-Table:  Road speeds (km/h).
+<!-- Table:  Road speeds (km/h). -->
+
+<!-- | Road class      | loaded | unloaded | harmonic mean |  -->
+<!-- |:----------------|-------:|---------:|--------------:| -->
+<!-- | primary highways|    80  |       95 |           85  | -->
+<!-- | other paved     |    65  |       80 |           70  | -->
+<!-- | 2-lane gravel   |    50  |       70 |           60  |  -->
+<!-- | 1-lane gravel or dirt  |    20  |       30 |           25  |  -->
+<!-- | no road           |     5  |       5  |           5   | -->
+
+Table:  Road speeds based on FPInnovations (km/h).
 
 | Road class      | loaded | unloaded | harmonic mean | 
 |:----------------|-------:|---------:|--------------:|
-| primary highways|    80  |       95 |           85  |
-| other paved     |    65  |       80 |           70  |
-| 2-lane gravel   |    50  |       70 |           60  | 
-| 1-lane gravel or dirt  |    20  |       30 |           25  | 
+| primary highways|    85  |       95 |           90  |
+| other paved     |    77  |       86 |           81  |
+| 2-lane gravel   |    60  |       67 |           63  | 
+| 1-lane gravel or dirt  |    29  |       25 |           27  | 
 | no road           |     5  |       5  |           5   |
 
 Table:  blah blah blah
@@ -1094,12 +1156,20 @@ knitr::include_graphics("../img/cutblocks2009.png")
 knitr::include_graphics("../img/harvesttwp.png")
 ```
 
+
+\newpage
+\blandscape
+```{r merchvol, echo=FALSE, fig.cap="Merchantable volume by township.  The left panel indicates total merchantable volume in the township from the 250 m data, and the boundaries of Alberta's green and white areas.  The right panel indicates average harvestable volume (m³/ha) after non-merchantable stands have been filtered out.", out.width = '100%'}
+knitr::include_graphics("../img/Merchantable Volume.png")
+```
+\elandscape
   
+\newpage
+\blandscape
 ```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and one-way haul time (right) from Edson, limited to 6 hours.", out.width = '100%'}
 knitr::include_graphics("../img/network_service.png")
 ```
-
-
+\elandscape
 
 <!-- ```{r studyarea, echo=FALSE, fig.cap="Location of hypothetical residue processing plants in relation to FMAA boundaries and the Green and White Areas of Alberta.", out.width = '80%'} -->
 <!-- knitr::include_graphics("../img/study_area.png") -->
@@ -1110,42 +1180,55 @@ knitr::include_graphics("../img/network_service.png")
 <!-- knitr::include_graphics("../img/ecozonesAlex.png") -->
 <!-- ``` -->
 
-
+\newpage
+\blandscape
 ```{r pressure, echo=FALSE, fig.cap="NFDP harvest levels compared with estimated.", out.width = '100%'}
 suppressWarnings(print(harv_comparison))
 ```
+\elandscape
 
-
-```{r resdiue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'}
-knitr::include_graphics("../img/residue_per_ha.png")
+```{r residue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'}
+knitr::include_graphics("../img/residue.png")
 ```
 
 
-
-```{r cyclePlot, echo=FALSE, fig.cap="Distribution of cycle times by location.", out.width = '100%'}
+\newpage
+\blandscape
+```{r cyclePlot, echo=FALSE, fig.cap="Distribution of cycle times by location for each of the years 1990--2015.  The middle red curve is for a medium harvest level year (2009), the lower red curve is for a high harvest level year (2005), and the upper red curve is for a low harvest level year (1990).", out.width = '100%'}
 suppressWarnings(print(cyclePlot))
 ```
+\elandscape
 
 
-```{r mcpPlot, echo=FALSE, fig.cap="Distribution of marginal costs by location.", out.width = '100%'}
+\newpage
+\blandscape
+```{r mcpPlot, echo=FALSE, fig.cap="Distribution of marginal costs by location for each of the years 1990--2015.  The middle red curve is for a medium harvest level year (2009), the lower red curve is for a high harvest level year (2005), and the upper red curve is for a low harvest level year (1990).", out.width = '100%'}
 suppressWarnings(print(mcPlot))
 ```
+\elandscape
 
-```{r bPlot, echo=FALSE, fig.cap="Boxplots of costs by location.", out.width = '100%'}
+\newpage
+\blandscape
+```{r bPlot, echo=FALSE, fig.cap="Boxplots of costs by location and biomass requirements for the years 1990--2015.", out.width = '100%'}
 suppressWarnings(print(bPlot))
 ```
+\elandscape
 
+\newpage
+\blandscape
 ```{r avePlot, echo=FALSE, fig.cap="Average costs by location and year.", out.width = '100%'}
 suppressWarnings(print(avePlot))
 ```
+\elandscape
 
-```{r w2009, echo=FALSE, fig.cap="Relationship between timber harvest intensity and required supply area for facilities with demands of 200, 400, and 800 Tg.  The area of the dots reflects the proportion of the area of each township harvest in 2009", out.width = '100%'}
+
+```{r w2009, echo=FALSE, fig.cap="Relationship between timber harvest intensity and required supply area for facilities with biomass requirements of 200, 400, and 800 Gg/a.  The area of the dots reflects the proportion of the area of each township harvest in 2009", out.width = '100%'}
 knitr::include_graphics("../img/w2009.png")
 ```
 
 \newpage
 \blandscape
-```{r wcontour, echo=FALSE, fig.cap="Supply area for facilities in Whitecourt with demands of 200, 400, and 800 Tg for low cost (2005), medium cost (2009), and high cost (1990) years.", out.width = '100%'}
-knitr::include_graphics("../img/wcontours.png")
+```{r wcontour, echo=FALSE, fig.cap="Supply area for facilities in Whitecourt with biomass requirements of 200, 400, and 800 Gg/a for low cost (2005), medium cost (2009), and high cost (1990) years.", out.width = '100%'}
+knitr::include_graphics("../img/Cumulative Contours Whitecourt.png")
 ```
 \elandscape

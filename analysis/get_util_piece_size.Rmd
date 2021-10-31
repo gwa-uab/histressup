@@ -158,6 +158,9 @@ save(util_piece_fmu_twp_species,file="../data/util_piece_fmu_twp_species.RData")
 
 util_piece_fmu_twp_species
 spp_lookup
+
+avepieceC
+avepieceD
 ```
 
 # Literature cited

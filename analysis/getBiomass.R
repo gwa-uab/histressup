@@ -21,7 +21,7 @@ load("../data/decidProps.RData")
 
 fte <- fmu_twp_ecozone %>% 
   filter(FTEAREA > 0.001) %>% 
-  select(TRM,FMU_NAME,ECOZONE) %>% 
+  select(TRM,FMU_NAME,ECOZONE,FTEAREA,areaha) %>% 
   rename(FMU = FMU_NAME) %>% 
   rename(Ecozone = ECOZONE)
 
@@ -98,26 +98,36 @@ load("../data/fte.RData")
 fte <- fte %>% 
   select(TRM,FMU,Ecozone,fteprop)
 
-fte_residue <- left_join(residue_by_TFE,fte)
+fte_residue <- left_join(residue_by_TFE,fte,by = c("TRM","FMU","Ecozone"))
 
-fte_residue <- fte_residue %>% 
-  mutate(con_new = res_con * fteprop) %>%
-  mutate(dec_new = res_dec * fteprop) %>%
-  mutate(total_new = res_total * fteprop) %>%
-  select(TRM,con_new,dec_new,total_new) %>%
-  rename(res_con = con_new) %>% 
-  rename(res_dec = dec_new) %>% 
-  rename(res_total = total_new) 
-  
-attach(fte_residue)
+# fte_residue <- fte_residue %>% 
+#   mutate(con_new = res_con * fteprop) %>%
+#   mutate(dec_new = res_dec * fteprop) %>%
+#   mutate(total_new = res_total * fteprop) %>%
+#   select(TRM,con_new,dec_new,total_new) %>%
+#   rename(res_con = con_new) %>% 
+#   rename(res_dec = dec_new) %>% 
+#   rename(res_total = total_new) 
 
-biomass_by_trm <- aggregate(fte_residue,by=list(TRM), FUN=sum)
-
-biomass_by_trm <- biomass_by_trm %>% 
-  select(-TRM) %>% 
-  rename(TRM = Group.1)
+biomass_by_trm <- fte_residue %>% 
+  group_by(TRM) %>% 
+  summarise(res_dec_mean = weighted.mean(res_dec,fteprop),
+            res_con_mean = weighted.mean(res_dec,fteprop),
+            res_total_mean = weighted.mean(res_total,fteprop)) %>% 
+  rename(res_dec = res_dec_mean) %>% 
+  rename(res_con = res_con_mean) %>% 
+  rename(res_total = res_total_mean)
+# head(f)
+# attach(fte_residue)
+# 
+# biomass_by_trm <- aggregate(fte_residue,by=list(TRM), FUN=sum)
+# 
+# biomass_by_trm <- biomass_by_trm %>% 
+#   select(-TRM) %>% 
+#   rename(TRM = Group.1)
 
 save(biomass_by_trm,file = "../data/biomass_by_trm.RData")
+write.csv(biomass_by_trm,"../data/biomass_by_trm.csv",row.names = FALSE)
 
 
 
