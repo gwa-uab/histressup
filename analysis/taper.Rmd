@@ -5,6 +5,8 @@ author:
 - Glen W Armstrong^[Department of Renewable Resources, University of Alberta]
 
 date: "19/03/2021"
+header-includes:
+  - \usepackage[british]{babel}
 output:
   html_document:
     df_print: paged
@@ -21,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries, echo=FALSE, message=FALSE}
-#setwd("g:/Shared drives/FES_Data_Sharing (Forestry)/Manuscripts/Historical Residue Supply/Analysis")
+#setwd("H:/Shared drives/FES_Data_Sharing/Manuscripts/histressupp")
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
