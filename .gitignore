@@ -13,3 +13,9 @@
 *.zip
 *.html
 *.bak
+/data/*.shp
+/data/*.dbf
+/data/*.gpkg
+/data/*.shx
+/data/*.prj
+/data/*.qgz
