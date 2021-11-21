@@ -95,7 +95,7 @@ strengths
 
 ## Justification
 
-
+  
 * renewable fuels better than fossil fuels
 * forest harvest residue just piled and burned
 * forest road networks in Alberta radiate from location
@@ -362,14 +362,14 @@ volume, stand age, and species composition attributes from these
 data layers.
 
 Another product of NFIS is a set of spatial datasets derived from
-satellite data @NFIS2021b.  The dataset used for this study is the
+satellite data @NFIS2021a.  The dataset used for this study is the
 harvest year data set for the years 1985-2015.  The dataset is
 described in detail by Hermosilla *et al.*  @Hermosilla2016.  It
 consists of a raster for Canada at 30 m resolution indicating the year
 of harvest for each cell.
 
 The NFIS also provides a web-based individual tree biomass calculator
-@NFIS2021a.  It is used to calculate stem wood, stem bark, branch, and
+@NFIS2021b.  It is used to calculate stem wood, stem bark, branch, and
 foliage biomass for a tree based on province, ecozone, species,
 diameter at breast height (DBH) and height.  It is possible to upload
 a file representing many trees with different combinations of these
@@ -407,7 +407,7 @@ standards and average piece size of harvested trees for the FMAA @Alberta2021.
 
 The boundaries of Canada's terrestrial ecozones can be found on
 Agriculture and Agri-Food Canada's website @Canada2017.  Ecozone is an
-input to the individualt tree biomass calculator @NFIS2021.
+input to the individualt tree biomass calculator @NFIS2021b.
 
 
 # Data aggregation and modeling 
@@ -591,7 +591,7 @@ Therefore, the cost of transporting residual biomass was set to
 
 ## Harvested area
 
-The areas harvested by township in 2009 according to NFIS @NFIS2021b
+The areas harvested by township in 2009 according to NFIS @NFIS2021a
 @Hermosilla2016 are shown in relationship to the three plant locations and 
 the Green Area in Figure 1.  Similar aggregated data were created for
 each of the years 1990--2015. For each township, and
@@ -601,7 +601,7 @@ harvest took place near our hypothetical plant locations in 2009.
 
 These data were created by using QGIS zonal statistics to sum the area
 harvested in each township in each year based on the 30 m resolution
-harvest data @NFIS2021b. 
+harvest data @NFIS2021a. 
 
 
 ## Utilization standards
@@ -739,7 +739,7 @@ the volume adjustment factor.
 ### Individual tree resdual biomass.
 
 Canada's national forest inventory website provides a useful individual
-tree biomass calculator @NFIS2016.  It calculates the biomass of tree 
+tree biomass calculator @NFIS2021b.  It calculates the biomass of tree 
 components (stem wood, stem bark, branches, foliage, and total) using
 province/territory, terrestrial ecozone, species, DBH, and tree height as input.
 It is possible to upload a file to the calculator so that the biomass of
@@ -883,7 +883,7 @@ adjusted volume per hectare by the average piece size for both
 needleleaf and broadleaf trees.  We assume that for the types of
 stands being harvested that the stem count per hectre for the 13/+7
 utilization standard is close to the stem count based on the FMU
-utilization standard.  We multiply the stem count by the average tree
+utilization standard.  We multiply the stem count by the average tree 
 residual biomass. We assume an average recovery factor of 0.624
 following what Peltola *et al.*  @Peltola2011 determined for Finland,
 recognizing that some of the residual biomass will be unrecoverable.
@@ -1009,7 +1009,7 @@ harv_comparison <- ggplot(data=harv5a, aes(x = year,y = sum, linetype = Harvest)
   theme_minimal()+
   theme(legend.position = c(0.9,0.3))
 
-ggsave("../img/harv_comparison.tiff", plot = harv_comparison, device='tiff', dpi=300)
+ggsave("../img/harv_comparison.png", plot = harv_comparison, device='png', dpi=300)
 
 
 t <- read.csv(file = '../data/median_one_way_travel_time_s.csv')
@@ -1129,7 +1129,7 @@ cyclePlot <-
   scale_y_continuous(limits=c(0,14)) +
   theme_minimal()
 
-ggsave("../img/cyclePlot.tiff", plot = cyclePlot, device='tiff', dpi=300)
+ggsave("../img/cyclePlot.png", plot = cyclePlot, device='png', dpi=300)
 
 
 ```
@@ -1156,7 +1156,7 @@ mcPlot <-
   scale_y_continuous(limits=c(50,250))+
   theme_minimal()
 
-ggsave("../img/mcPlot.tiff", plot = mcPlot, device='tiff', dpi=300)
+ggsave("../img/mcPlot.png", plot = mcPlot, device='png', dpi=300)
 
 ```
 
@@ -1185,7 +1185,7 @@ bPlot <- ggplot(t,aes(factor(year),residueCost))  +
     theme(axis.text.x = element_text(angle=90)) +
   theme_bw()
 
-ggsave("../img/bPlot.tiff", plot = bPlot, device='tiff', dpi=300)
+ggsave("../img/bPlot.png", plot = bPlot, device='png', dpi=300)
 
 
 ```
@@ -1209,8 +1209,8 @@ avePlot <- ggplot(data=avet, aes(x=year,y=avecost,linetype=location))+
   scale_y_continuous(limits=c(60,180)) +
   theme_bw()
 
-#ggsave("../img/avePlot.tiff", plot = avePlot, width = 6, height = 4, units = "in", device='tiff', dpi=300)
-ggsave("../img/avePlot.tiff", plot = avePlot, device='tiff', dpi=300)
+#ggsave("../img/avePlot.png", plot = avePlot, width = 6, height = 4, units = "in", device='png', dpi=300)
+ggsave("../img/avePlot.png", plot = avePlot, device='png', dpi=300)
 
 
 aveave <- avet %>%
@@ -1493,3 +1493,4 @@ knitr::include_graphics("../img/w2009.png")
 knitr::include_graphics("../img/Cumulative Contours Whitecourt.png")
 ```
 \elandscape
+   
