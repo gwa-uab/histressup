@@ -21,7 +21,7 @@ date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
   pdf_document:
     includes:
-      in_header: preamble.tex
+      in_header: preamble.tex 
     number_sections: yes
     latex_engine: xelatex
     keep_tex: yes
@@ -62,17 +62,8 @@ knitr::opts_chunk$set(echo = TRUE)
 #setwd("/mnt/chromeos/GoogleDrive/SharedDrives/FES_Data_Sharing_Forestry/Manuscripts/histressupp/analysis")
 library(tidyverse)
 library(ggthemes)
-library(gridExtra) 
-library(viridis)
-library(skimr)
 library(scales)
-library(DescTools)
-library(zoo)
-library(ezknitr)
-library(magick)
-library(kableExtra)
 library(gt)
-library(glue)
 library(quantmod)
 library(bookdown)
 ```
@@ -81,19 +72,10 @@ library(bookdown)
 
 # Introduction
 
-1. **Focus on cost variability associated with transportation and forest  characteristics**
-2. **Based on historical harvest locations (1990-2015)**
-
-Need to reference Yemshanov @Yemshanov2014 and Blackburn @Blackburn2020a.  Our
-strengths
-
 1. Availability of data
 2. Temporal variability
 3. suitability for mid-level analysis
 4. ultra-cool graphics
-
-
-## Justification
 
   
 * renewable fuels better than fossil fuels
@@ -102,79 +84,109 @@ strengths
 * terrain is difficult
 * simple circle or doughnut models of limited utility 
   
-Biofuels are becoming an increasingly important source of energy because
-of their potential to reduce dependency on fossil fuels, thereby
-reducing greenhouse gas emissions (IEA Bioenergy 2013). Moreover, second
-generation biofuel provides the benefit of avoiding competition with
-food production by using lignocellulosic biomass -- often in the form of
-agriculture and forest residues -- as feedstock (source?). Forest
-residues are generated as by-products of conventional forest harvesting
-operations, and include the tree tops, branches and non-merchantable
-logs. These residues are typically left behind in slash piles, which are
-burned during winter to mitigate against the risk of wildfires. Canada
-has a developed forestry sector that produces approximately 20 million
-oven-dry metric tons  of forest residues (Dymond et al. 2010) @Dymond2010.
+Humans have been using biofuels since we learned to control fire a
+million or so years ago.  In developed economies, biofuels were
+largely displaced by coal during the industrial revolution, and by
+petroleum starting in the mid-nineteenth century.  In recent times,
+biofuels are an increasingly important source of energy because of
+their potential to reduce dependency on fossil fuels and reduce
+greenhouse gas emissions.  Direct combustion of biomass is still an
+important source of energy.  In Europe, in particular, many
+electricity plants have been converted to use wood pellets instead of
+coal as the primary energy source.  Liquid biofuels (*e.g.* ethanol
+and biodiesel) have been produced in commercial quantities from food
+crops starting in the 1980s.  These are called first generation
+biofuels.  A major difficulty with these first generation biofuels is
+that they compete with food and that they may lead to land use change.
 
-Despite the potential to produce biofuels from forest residues, such use
-is limited to a few highly subsidized pilot projects. Indeed, several
-operational and economic challenges hinder the utilization of forest
-residues. These challenges are related to: (1) capital investments in
-biorefineries, (2) geographical distance between feedstock and markets,
-and (3) concerns surrounding feedstock availability (Shabani et al.
-2013) @Shabani2013. The purpose of our study is to explore concerns surrounding this
-third challenge -- feedstock availability -- by evaluating annual
-variability in commercial stemwood harvest in the province of Alberta,
-Canada.
+Second generation biofuels rely on processes that convert
+lignocellulosic materials (such a corn stover and wood) to liquid
+biofuels.  An advantage of this process is that the feedstock can be
+residue from food or forest products production.  Second generation
+biofuel production is still largely in the pilot phase.  An
+interesting example using forest residues is the Silva Green Fuel
+renewable crude oil plant in Tofte, Norway which is expected to begin
+operations in 2021 @Lane2018.
+
+
+Wood pellets are a well-established biofuel.  It is projected that
+Canada will produce 3.8 million Mg of wood pellets in 2021, of which
+87% will be exported, largely to the United Kingdom, Japan, and Europe
+@Watters2021.  Wood pellets are replacing coal as the primary energy
+source in electricity generating plants, particularly in Europe
+@Sterman2018.  Most of the wood pellet production in Canada comes from
+mill waste.  There is interest in expanding the source to the forest
+by collecting the residue left on cutblocks after harvest.  Forest
+residues are generated as by-products of conventional forest
+harvesting operations, and include the tree tops, branches and
+non-merchantable logs. These residues are typically left behind in
+slash piles, which are burned during winter to mitigate against the
+risk of wildfires. Canada has a forestry sector that produces
+approximately 20 million oven-dry metric tons of forest residues
+annually @Dymond2010.  For the remainder of this paper we will express
+biomass using SI units, and all quantities of biomass will be
+expressed on an oven-dry basis: 1 oven-dry metric ton is equivalent to
+1 Mg.
+
+ 
+<!-- Clean fuel standard https://gazette.gc.ca/rp-pr/p1/2020/2020-12-19/html/reg2-eng.html  -->
+
+
+<!-- Despite the potential to produce biofuels from forest residues, such use -->
+<!-- is limited to a few highly subsidized pilot projects. Several -->
+<!-- operational and economic challenges hinder the utilization of forest -->
+<!-- residues. These challenges are related to: (1) capital investments in -->
+<!-- biorefineries, (2) geographical distance between feedstock and markets, -->
+<!-- and (3) concerns surrounding feedstock availability @Shabani2013. The purpose of our study is to explore concerns surrounding this -->
+<!-- third challenge -- feedstock availability -- by evaluating annual -->
+<!-- variability in commercial stemwood harvest in the province of Alberta, -->
+<!-- Canada. -->
 
 A number of studies have shown that collection and transportation
 costs are arguably the biggest constraint to widespread use of forest
-residues in bioenergy systems (Ralevic et al 2003, Wood and Layzell
-2003, Kumar et al. 2003, Rummer 2007, Aulakh 2008)
+residues in bioenergy systems
 [@Kumar2003,@Rummer2007,@Aulakh2008]. Availability of forest residues
-for a biorefinery largely depend on commercial harvesting operations
+for a bioenergy plant largely depend on commercial harvesting operations
 and the production of traditional forest products. Fluctuations in the
-volume of stemwood harvested for forest products could have a direct
+volume of stemwood harvested for forest products has a direct
 impact on residues available for biofuels. Major factors, such as the
 2008 housing crisis and the ongoing softwood lumber dispute with the
 United States have resulted in sawmill closures and reductions in
-forest harvesting activities (de Avillez 2014, Spelter 2009)
-@deAvillez2014 @Spelter2009. This relationship between volatile sawlog
-harvests and subsequent residue variability is explored in detail by
-Niquidet and Friesen (2014) @Niquidet2014, who model forest residue
-supply in Alberta as a direct function of lumber prices. Given that
-biomass feedstock accounts for 40 to 60% of a biorefinery's total
-costs (Stephen et al. 2010) @Stephen2010, reliable feedstock supplies
-and costs over the life of the biorefinery are important factors to
-consider when deciding where to locate the biorefinery.
+forest harvesting activities
+@deAvillez2014 @Spelter2009. This relationship between volatile
+harvest volumes and subsequent residue variability is explored in detail by
+Niquidet and Friesen @Niquidet2014, who model forest residue
+supply in Alberta as a  function of lumber prices. Given that
+biomass feedstock accounts for 40 to 60% of a bioenergy plant's total
+costs @Stephen2010, reliable feedstock supplies
+and costs over the life of the bioenergy plant are important factors to
+consider when deciding where to locate the bioenergy plant.
 
-Though past studies regarding biorefinery locations have greatly
+Though past studies regarding bioenergy plant locations have greatly
 improved our understanding of feedstock availability and constraints,
 one key area that has largely been omitted is considerations of
 feedstock supply variability over time. Commercial stemwood harvests
 vary year-to-year, largely based on market conditions for forest
-products. Since a forest-residue based biorefinery is dependent on
+products. Since a forest-residue based bioenergy plant is dependent on
 stemwood harvesting for feedstock, any variability in harvesting
 directly influences the volume of residues that would be available.
 Therefore, considering the variability associated with feedstocks in
 different locations could be important in choosing the optimal site for
-locating a biorefinery
+locating a bioenergy plant
 
-Although not related to a biorefinery siting decision, some studies
+Although not related to a bioenergy plant siting decision, some studies
 have considered variable feedstock supplies when investigating whether
 and when to expand the production of bioenergy from burning residues
-(Bolkesjo et al. 2006; Buongiorno et al. 2011; Galik et al. 2009;
-Moiseyev et al. 2011) @Bolkesjo2006 @Buongiorno2011 @Galik2009. Other
+ @Bolkesjo2006 @Buongiorno2011 @Galik2009. Other
 studies have explored the context of variable supplies when making
 decisions about capital investments in forest residue-based
-biorefineries (Cambero et al 2015, Chen and Fay 2011, Papapostolou and
-Kondili 2011) @Cambero2015, @Chen2012 @Papapostolou2011. Variable
+biorefineries  @Cambero2015, @Chen2012 @Papapostolou2011. Variable
 feedstock supplies are also shown to affect capital investment
 decisions related to: investing in a residue preprocessing facility
 (Chen and Fay 2011) @Chen2012, types of storage infrastructure for
-biorefinery feedstocks (Papapostolou and Kondili 2011)
+bioenergy plant feedstocks (Papapostolou and Kondili 2011)
 @Papapostolou2011, as well as whether to invest in biofuels versus
-bioenergy, and when to invest in processing facilities (Cambero et al.
-2015) @Cambero2015.
+bioenergy, and when to invest in processing facilities  @Cambero2015.
 
 There has been a number of studies conducted regarding siting decisions
 for forest residue-based biorefineries -- see Johnson et al (2012) @Johnson2012  for
@@ -184,18 +196,18 @@ forest residue variability. Therefore, our study contributes to the
 literature by considering variability in forest residue feedstock
 supplies. More specifically, we analyze how this variability affects the
 cost of delivering residue, and then use these cost estimates to inform
-the decision on where to locate a biorefinery.
+the decision on where to locate a bioenergy plant.
 
-We consider co-locating the biorefinery adjacent to either a sawmill or
-a pulpmill. Co-locating with existing facilities and making use of
-established infrastructure and transportation systems can reduce many of
-the costs associated with establishing a new biorefinery (Browne et al.,
-2012; Saddler et al., 2012; Benjamin et al., 2009; Towers, et al.,
-2007). @Browne2012 @Saddler2012 @Benjamin2009 @Towers2007 The decision to co-locate a biorefinery near a sawmill or
-pulpmill should be informed by how stable the respective residue
-supplies are. The facility with a more stable stemwood harvest would
-generate a more stable supply of forest residues that could be collected
-from the nearby harvested areas.
+We consider co-locating the bioenergy adjacent to either a sawmill
+or a pulpmill. Co-locating with existing facilities and making use of
+established infrastructure and transportation systems can reduce many
+of the costs associated with establishing a new bioenergy plant
+@Browne2012 @Saddler2012 @Benjamin2009 @Towers2007 The decision to
+co-locate a bioenergy plant near a sawmill or pulpmill should be informed
+by how stable the respective residue supplies are. The facility with a
+more stable stemwood harvest would generate a more stable supply of
+forest residues that could be collected from the nearby harvested
+areas.
 
 The objectives of our study are ...... Our approach incorporates
 variable feedstock availability into decision making, and our results
@@ -203,44 +215,48 @@ provide important information for assessing the potential for a forest
 residue-based biofuel industry in Alberta.
 
 The remainder of the paper is as follows: The next section describes
-.......
 
-**OTHER POTENTIALLY USEFUL TIDBITS..**
+The methods used for this study are similar to that used by
+FPInnovations for their biomass availability estimations for timber
+supply areas in British Columbia (see Ref. @Blackburn2020 for an
+example).  Like us, FPInnovations develops supply curves
+(cost-availability curves based on a road network and historical
+harvests).  However, their take on temporal variability is limited to
+examining 2 5-year periods. As well, they limit their analyses to the
+boundaries of timber supply areas.  We do not limit ourselves with
+arbitrary boundaries.  Supply cost curves.
 
-The need to go outside its normal delivery zone in bad years is similar
-to a scenario in the agriculture residue feedstock supply literature,
-called the the "derisked" scenario, whereby a buffer area outside the
-normal supply zone is contracted to provide residues during years when
-residue supply is low (Golecha and Gan 2016) @Golecha2016.
+Our analysis also shares some similarities with work published by
+Yemshanov *et al.* @Yemshanov2014. National level based on costs to
+cogeneration facilities. Potential harvest locations.   Again our interest included
+temporal variability. actual harvest locations.
+<!-- ....... -->
 
-Residue variability is an important source of risk for a forest
-residue-based biorefinery. Being dependent upon stemwood harvests for
-the generation of residues can lead to cost variability over the long
-operating life of a biorefinery, making it is important to have a
-comprehensive feedstock risk management program. If the conversion
-technology allows it, biorefineries could consider creating a portfolio
-of different sources of residues. Such a portfolio approach might
-consider locating the biorefinery where it could also access
-agricultural residues during periods when availability of forest
-residues is low. We plan to investigate feedstock portfolios in future
-research.
+<!-- **OTHER POTENTIALLY USEFUL TIDBITS..** -->
 
-Modern biorefineries can expect to breakeven financially with delivered
-biomass costs of approximately \$80 (US\$60) t\[oven dried\]^-1^
-(Steeper 2021) @Steeper2021 . Studies have shown that forest policy reforms could
-reduce delivered forest residue costs by incenting plantations of
-fast-growing tree species on lands close to pulpmill locations
-(Shooshtarian et al. 2021 @Shooshtarian2021, Anderson et al. 2012 @Anderson2012). Other important
-factors will be advances in biorefinery technology and increases in
-biofuel prices. In Canada, governments impact biofuel prices by setting
-renewable fuel mandates and paying subsidies for biofuel production
-(Campbell et al., 2016). The continuation of these mandates and
-subsidies will likely be an important factor for the emergence of a
-second-generation ("advanced") biofuel sector. Also, the Government of
-Canada\'s Clean Fuel Standard, which is proposed to come into force in
-2022 (Government of Canada, 2020), is expected to improve the economics
-of advanced biofuel production.
-`
+<!-- The need to go outside its normal delivery zone in bad years is similar -->
+<!-- to a scenario in the agriculture residue feedstock supply literature, -->
+<!-- called the the "derisked" scenario, whereby a buffer area outside the -->
+<!-- normal supply zone is contracted to provide residues during years when -->
+<!-- residue supply is low @Golecha2016. -->
+
+
+<!-- Modern biorefineries can expect to breakeven financially with -->
+<!-- delivered biomass costs of approximately \$80 (US\$60) t\[oven -->
+<!-- dried\]^-1^ (Steeper 2021) @Steeper2021 . Studies have shown that -->
+<!-- forest policy reforms could reduce delivered forest residue costs by -->
+<!-- incenting plantations of fast-growing tree species on lands close to -->
+<!-- pulpmill locations (Shooshtarian et al. 2021 @Shooshtarian2021, -->
+<!-- Anderson et al. 2012 @Anderson2012). Other important factors will be -->
+<!-- advances in biorefinery technology and increases in biofuel prices. In -->
+<!-- Canada, governments impact biofuel prices by setting renewable fuel -->
+<!-- mandates and paying subsidies for biofuel production (Campbell et al., -->
+<!-- 2016). The continuation of these mandates and subsidies will likely be -->
+<!-- an important factor for the emergence of a second-generation -->
+<!-- ("advanced") biofuel sector. Also, the Government of Canada\'s Clean -->
+<!-- Fuel Standard, which is proposed to come into force in 2022 -->
+<!-- (Government of Canada, 2020), is expected to improve the economics of -->
+<!-- advanced biofuel production.   -->`
 
 # Materials and methods
 
@@ -1347,6 +1363,20 @@ Mg^-1^).  The average cost of supplying a 800 Gg/a plant is at least
 Perhaps it makes sense to transport to smaller plants (e.g. pellets), and
 then aggregate at a larger plant (e.g. ethanol).  Pellets are cheaper to 
 transport than comminuted biomass.
+
+
+Residue variability is an important source of risk for a forest
+residue-based biorefinery. Being dependent upon stemwood harvests for
+the generation of residues can lead to cost variability over the long
+operating life of a biorefinery, making it is important to have a
+comprehensive feedstock risk management program. If the conversion
+technology allows it, biorefineries could consider creating a portfolio
+of different sources of residues. Such a portfolio approach might
+consider locating the biorefinery where it could also access
+agricultural residues during periods when availability of forest
+residues is low. We plan to investigate feedstock portfolios in future
+research.
+
 
 # Data availability {-}
 
