@@ -1,0 +1,11 @@
+
+ffmpeg -r 1 -f image2 -start_number 1990 -i Hinton\ %04d.png -vcodec libx264 h.mp4
+
+-r 1:  1 frame/second
+-start_number 1990:  use 1990 as the first frame
+-i Hinton\ %04d.png : grab the 4 digit number from the file name.
+
+
+rename -v 's/([0-9]*)/sprintf(%02d,$1-1989)/e' [12]*
+
+rename a file starting with a 1 or a 2 by subtracting 1989 from the numeric string in the file name.  I used this befor I learned how to set start_number with ffmpeg.
