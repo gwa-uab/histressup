@@ -104,9 +104,11 @@ knitr::include_graphics("../img/figHarvest2009.png")
 
 
 \newpage
+\blandscape
 ```{r haul, echo=FALSE, fig.cap="Alberta road network (left) and cycle time (right) from Whitecourt, limited to 14 hours."}
 knitr::include_graphics("../img/network_service.png")
 ```
+\elandscape
 \newpage
 
 
@@ -118,10 +120,13 @@ knitr::include_graphics("../img/harv_comparison.png")
 
 
 \newpage
+\blandscape
 
 ```{r merchvol, echo=FALSE, fig.cap="Merchantable volume by township.  The left panel indicates total merchantable volume in the township from the 250 m data, and the boundaries of Alberta's green and white areas.  The right panel shows the assumed volume per harvested hectare."}
 knitr::include_graphics("../img/Merchantable Volume.png")
 ```
+\elandscape
+\newpage
 
 <!-- ```{r residue, echo=FALSE, fig.cap="Biomass residue available from harvest.", out.width = '100%'} -->
 <!-- knitr::include_graphics("../img/residue.png") -->
@@ -160,7 +165,7 @@ knitr::include_graphics("../img/whitecourt2009.png")
 
 \newpage
 
-```{r wcontour, echo=FALSE, fig.cap="Supply area for facilities in Whitecourt with biomass requirements of 200, 400, and 800 Gg/a for low harvest (2005), medium harvest (2009), and high harvest (1990) years."}
+```{r wcontour, echo=FALSE, fig.cap="Supply area for facilities in Whitecourt with biomass requirements of 200, 400, and 800 Gg/a for high harvest (2005), medium harvest (2009), and low harvest (1990) years."}
 knitr::include_graphics("../img/figContours3Years.png")
 ```
 
