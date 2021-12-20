@@ -69,7 +69,8 @@ coal as the primary energy source.  Liquid biofuels (*e.g.* ethanol
 and biodiesel) have been produced in commercial quantities from food
 crops starting in the 1980s.  These are called first generation
 biofuels.  A major difficulty with these first generation biofuels is
-that they compete with food and that their use  may lead to land use change.
+that they compete with food and that their use may lead to increased
+food costs land use change.
 
 Second generation biofuels rely on processes that convert
 lignocellulosic materials (such a corn stover and wood) to liquid
@@ -345,7 +346,7 @@ management agreement areas (FMAAs), Alberta Township Survey System
 
 The ATS boundaries are particularly important to this study as all the
 data used for this study are aggregated or disaggregated to the
-township level.  ATS provides the basis for legal land descriptions in
+township-level.  ATS provides the basis for legal land descriptions in
 Alberta.  The typical township is roughly square (9.778 km by 9.716
 km, 9 500 ha) and is indexed by township (1--126), range (1--30), and
 meridian (4--6).  The townships immediately east of Alberta's western
@@ -451,9 +452,12 @@ biomass curves starting with the lowest cycle time first.  These lists
 of cycle time and cumulative biomass provide the data for the marginal
 cycle time and cost curves.
 
-This is a greedy algorithm.  It ignores the cost of moving equipment
-from one block to another, but we believe it still provides useful
-information.
+The goal of the data aggregation is to provide a data set for a greedy 
+optimatizion model that minimizes the cost of harvesting forest residues
+for combinations of plant site, plant capacity, and year.  The data set 
+will consist of records representing each township in Alberta, with fields
+representing township ID, plant location, plant capacity, year, cycle time,
+and harvest cost.
 
 ## Cycle time estimates
 
@@ -553,8 +557,11 @@ fx <- getQuote(paste0(from, to, "=X"))
 ## Biomass collection costs
 
 All costs and prices used in this study are in Canadian dollars (\$).
-At the time of writing (`r sprintf("%s",fx[1,1])` GMT), the exchange rate between
-Canadian (CAD) and US dollars (USD) was `r sprintf("%.4f",fx[1,2])` USD/CAD.
+At the time of writing
+(`r sprintf("%s",fx[1,1])` GMT) , the exchange rate between
+Canadian (CAD) and US dollars (USD) was
+#`r sprintf("%.4f",fx[1,2])` 
+0.8031 USD/CAD.
 
 All measures of biomass used in this study are reported in SI units on
 a dry matter basis:  1 Mg is therefore equivalent to 1 oven dry metric 
@@ -911,15 +918,44 @@ greedy optimization.  They take the cheapest residue first, and stop
 when they have enough residue to satisfy annual plant
 requirements. For each combination of plant location and year, all the
 townships in Alberta were sorted by ascending cycle time (equivalently
-tranport cost).  The model works through this list, accumulating harvest
-residue recovered from the harvest area associated for the township
-and year, and provided a file showing cycle time, total cost, and
-cumulative residue recoverd.  Once this file is created, fairly simple
-data manipulations are undertaken to produce the results.
+tranport cost).  The model works through this list, accumulating
+harvest residue recovered from the harvest area associated for the
+township and year, and provides a file showing cycle time, total cost,
+and cumulative residue recoverd.  Once this file is created, fairly
+simple data manipulations are undertaken to produce the results.  See
+the pseudocode in section 3.8.1 for a summary.
 
 As with all models, this is a simplification.  One avenue that we
 would like to explore in future work is incorporation of the costs of
 moving equipment from one cutblock to the next.
+
+\newpage 
+### Pseudocode
+
+```{r, eval = FALSE}
+OBTAIN township-level summary
+FOR each plant site in township-level summary
+    FOR each year
+        SORT township-level summary by ascending cycle time
+        SET accumulated biomass to 0
+        FOR each capacity
+           SELECT records from township-level summaries
+               corresponding to plant site, year, and capacity
+           REPEAT
+               READ township biomass from 
+                   sorted township list
+               COMPUTE accumulated biomass as
+                   current accumulated biomass + township biomass
+               WRITE plant site, year, capacity, township id,
+                   cycle time, cost, accumulated biomass
+            UNTIL accumulated biomass is greater than or equal to
+               capacity
+        ENDFOR    
+    ENDFOR
+ENDFOR
+CREATE summary graphics and tables
+ 
+```
 
 ```{r read_data_files, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 newAB <- read.csv(file = '../data/AlbertaHarvestLevels.csv',
@@ -1382,7 +1418,7 @@ research.
 
 # Data availability {-}
 
-The data compiled to the township level are currently available on
+The data compiled to the township-level are currently available on
 github(https://github.com/gwa-uab/histressup/tree/main/data).  Before
 publication it will be placed on ERA with a DOI.
 
