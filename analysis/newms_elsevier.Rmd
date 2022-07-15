@@ -1,46 +1,55 @@
 ---
-title: Spatial and temporal variability in economic availability of residual biomass
-  from timber harvest in west-central Alberta, Canada (1990--2015)
+title: Spatial and temporal variability in economic availability of residual biomass from timber harvest in west-central Alberta, Canada (1990--2015)
 author:
   - name: Glen W. Armstrong
     email: gwa@ualberta.ca
-#    affiliation: rr
+    affiliation: rr
+    correspondingauthor: true
     footnote: 1
   - name: Jay A. Anderson
     email: jaya@ualberta.ca
-#    affiliation: rees
+    affiliation: rees
   - name: Alex McPhee
     email: awmcphee@ualberta.ca
-#    affiliation: rees
-#address:
-#  - code: rr
-#    address: Department of Renewable Resources, University of Alberta, Edmonton, Alberta, Canada, T6G 2H1
-#  - code: rees
-#    address: Department of Resource Economics and Environmental Sociology, University of Alberta, Edmonton, #Alberta, Canada, T6G 2H1
+    affiliation: rees
+address:
+  - code: rr
+    address: Department of Renewable Resources, University of Alberta, Edmonton, Alberta, Canada, T6G 2H1
+  - code: rees
+    address: Department of Resource Economics and Environmental Sociology, University of Alberta, Edmonton, Alberta, Canada, T6G 2H1
 footnote:
   - code: 1
-    text: "Corresponding Author"
+    text: "the footnote"
 abstract: |
-  We use historical forest harvest data from Alberta, Canada to develop
-  a description of the spatial and temporal distributions of the
-  availability of forest harvest residues for the period 1990---2015.
-  Using a GIS coverage of the road network in Alberta, we developed
-  estimates of round-trip haul costs from each harvest location to each of
-  three potential bioenergy plant locations. This information was used to
-  create supply curves (or cost-availability curves) for each of the three
-  potential locations and each of the 26 years. This information is used
-  to develop descriptions of the variability in the delivered costs of
-  forest residue for bioenergy use. These descriptions of variability are
-  historical, but could be useful for potential investors in the bioenergy   sector.
-
+  This is the abstract.
+  
+  It consists of two paragraphs.
+#  We use historical forest harvest data from Alberta, Canada to develop
+# a description of the spatial and temporal distributions of the
+# availability of forest harvest residues for the period 1990---2015.
+# Using a GIS coverage of the road network in Alberta, we developed
+# estimates of round-trip haul costs from each harvest location to each of
+# three potential bioenergy plant locations. This information was used to
+# create supply curves (or cost-availability curves) for each of the three
+# potential locations and each of the 26 years. This information is used
+# to develop descriptions of the variability in the delivered costs of
+# forest residue for bioenergy use. These descriptions of variability are
+# historical, but could be useful for potential investors in the bioenergy sector.
+keywords:
+  - argh
+  - billy
 journal: "Biomass & Bioenergy"
 date: "`r Sys.Date()`"
-bibliography: [historicalResidueSupply.bib]
-linenumbers: true
+classoption: preprint, 3p, authoryear
+bibliography: mybibfile.bib
+linenumbers: false
 numbersections: true
-csl: elsevier-without-titles.csl
-
-output: rticles::elsevier_article
+# Use a CSL with `citation_package = "default"`
+csl: https://www.zotero.org/styles/elsevier-harvard
+output: 
+  rticles::elsevier_article:
+    keep_tex: true
+    citation_package: natbib
 ---
 
 
