@@ -11,6 +11,9 @@ author:
   - name: Alex McPhee
     email: awmcphee@ualberta.ca
     affiliation: rees
+  - name: M.K. (Marty) Luckert
+    email: mluckert@ualberta.ca
+    affiliation: rees
 address:
   - code: rr
     address: Department of Renewable Resources, University of Alberta, Edmonton, Alberta, Canada, T6G 2H1
